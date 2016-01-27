@@ -1,5 +1,5 @@
 ---
-title: 'SG1022 Seminar 1: R BootCamp (1)'
+title: 'SG1022 Seminar 1: R BootCamp'
 author: "Christopher Gandrud"
 date: '2016'
 output:
@@ -12,6 +12,8 @@ output:
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
 
+- Office hours
+
 - Motivation
 
 - Getting around R and RStudio
@@ -19,6 +21,14 @@ output:
 - Basics of object-oriented programming in R
 
 - Finding Help and Installing Packages
+
+## Office Hours
+
+Christopher Gandrud's Office Hours (spring term): 
+
+- Thursday 16:00-18:00
+
+- D519
 
 ## <i class="fa fa-compass"></i> Motivation: Government
 
@@ -158,6 +168,8 @@ For a detailed tour: <http://dss.princeton.edu/training/RStudio101.pdf>
 ## {.flexbox .vcenter}
 
 R is a programming language. So, you will have to **change how you think about data/interacting with the computer**.
+
+It will be difficult at first, but it will open up many new possibilities.
 
 
 ## Fundamentals of the R language
@@ -311,15 +323,6 @@ ls()
 ```
 
 Or the *Environment* tab in RStudio
-
-## Style Guides
-
-As with natural language writing, it is a good idea to stick to one style guide
-with your R code:
-
-- [Google's R Style Guide](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml)
-
-- [Hadely Wickham's R Style Guide](http://r-pkgs.had.co.nz/style.html)
 
 ## Vectors
 
@@ -486,7 +489,7 @@ Grouped <- dplyr::group_by(combined_df, character_vector)
 
 - Open RStudio and explore:
 
-    + Create a new source code file. Run a few maths functions.
+    + Create a new source code file. Create character vector and numberic vectors. Combine them into a data frame. Save the source file.
 
     + Open the help file for the `mean` function.
 
@@ -494,7 +497,7 @@ Grouped <- dplyr::group_by(combined_df, character_vector)
 
 - Code School Interactive Tutorial: <http://tryr.codeschool.com/>.
 
-- You're own computer. If you want to, install R and RStudio on your own computer:
+- If you want to, install R and RStudio on your own computer:
 
     1. Install R: <https://cran.r-project.org/>.
 
