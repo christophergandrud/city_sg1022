@@ -46,7 +46,7 @@ of open data science.
     [New York City](https://nycopendata.socrata.com/),
     [data.gov](https://www.data.gov/open-gov/)
 
-- Governments rely on data analysis for evidence based decision-making.
+- Governments rely on data analysis for **evidence based decision-making**.
 
     + Tools of open data analysis enable better use of data **within** and
     **between** government actors.
@@ -104,13 +104,15 @@ R is a **programming language** with strong statistical capabilities.
 
 - Learning R means **learning computer programming** (applied statistics is programming!)
 
-- R is much, **much more flexible** than SPSS. For example, can do text analysis, SPSS can't.
+- R is much, **much more flexible** than SPSS. For example, can do text analysis and build web applications. SPSS can't.
 
 - Price:
 
     + R is open source = **FREE**.
 
     + SPSS **> £1,000**.
+
+- Prepares you to **learn other programming languages**, such as Python, C++, and JavaScript.
 
 - R and statistical programming languages are increasingly wanted in **high demand data science jobs**.
 
@@ -169,7 +171,7 @@ For a detailed tour: <http://dss.princeton.edu/training/RStudio101.pdf>
 
 R is a programming language. So, you will have to **change how you think about data/interacting with the computer**.
 
-It will be difficult at first, but it will open up many new possibilities.
+It will be **difficult at first**, but it will **open up many new possibilities**.
 
 
 ## Fundamentals of the R language
