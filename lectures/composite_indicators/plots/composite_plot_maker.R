@@ -43,6 +43,8 @@ cor_plot <- ggplot(cor_example, aes(x, y, group = labels)) +
     xlab('') + ylab('') +
     theme_bw()
 
+ggsave(cor_plot, filename = 'figures/corr_plot_example.pdf')
+
 
 
 # Sustainability Index ---------------------------------------------------------
@@ -65,17 +67,22 @@ wdi <- wdi %>% rename(methane_emissions = EN.ATM.METH.KT.CE) %>%
                rename(population_growth = SP.POP.GROW) %>%
                rename(alternative_energy = EG.USE.COMM.CL.ZS)
 
-# Drop incomplete cases
-wdi_sub <- DropNA(wdi, c('electricity_use', 
-                     'co2_emissions', 'population_growth', 
-                     'alternative_energy'))
-
 # Create correlation plot
 cor_wdi <- cor(wdi[, 5:8], use = 'complete.obs')
 
 pdf(file = 'figures/energy_corr.pdf')
     corrplot(cor_wdi, method = "number")
 dev.off()
+
+# Reverse code alternative energy use 
+## i.e. higher values of alternative energy use should indicate less unsustainability
+wdi$alternative_energy <- max(wdi$alternative_energy, na.rm = TRUE) - 
+    wdi$alternative_energy
+
+# Drop incomplete cases
+wdi_sub <- DropNA(wdi, c('electricity_use', 
+                         'co2_emissions', 'population_growth', 
+                         'alternative_energy'))
 
 
 # FRT Comparison ---------------------------------------------------------------

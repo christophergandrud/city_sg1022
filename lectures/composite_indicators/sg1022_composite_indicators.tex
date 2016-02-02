@@ -22,6 +22,9 @@
 
 \usepackage{graphicx}
 
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
 \usepgfplotslibrary{dateplot}
 
 \usemintedstyle{trac}
@@ -38,31 +41,16 @@
 
 \maketitle
 
-\section{Aims}
-
 \frame{
     \frametitle{Aims}
 
     \begin{itemize}
         \item What are composite indicators and who uses them?
 
-        \item Defining the construct and what can be observed.
-
         \item Making Composite Indicators
 
-            \begin{itemize}
-                \item What data to include?
+        \item Pros and cons
 
-                \item How to normalise the variables?
-
-                \item How to weight the variables?
-
-                \item Assessing validity (introduction)
-            \end{itemize}
-
-        \item Pros, cons, and pitfalls
-
-        \item Survey examples
     \end{itemize}
 
 }
@@ -133,7 +121,7 @@
 \frame{
 
     \begin{center}
-        \ldots we need a {\large{composite indicator}} to operationalise Dahl's conceptualisation of democracy.
+        \ldots we need a {\large{composite indicator}} to operationalise Dahl's democracy.
     \end{center}
 
 }
@@ -168,14 +156,14 @@
     \frametitle{Why care?}
 
     \begin{center}
-        If we don't have good measures of our concepts, {\large{we can't know how one thing effects another (relationships \emph{between} concepts) and how to improve the social world}}.
+        If we don't have good measures of our concepts, {\large{we can't know how one thing effects another}} (relationships \emph{between} concepts) and {\large{how to improve the social world}}.
     \end{center}
 }
 
 \frame{
     \frametitle{Composite indicators and policy-making}
 
-    Composite indicators are a popular tool used by governments, international organisations, NGOs, and public policy advocacy groups.
+    Composite indicators are a popular tool used by governments, international organisations, NGOs, and public policy advocacy groups to both {\large{understand}} the world and {\large{advocate}} for changes.
 
 }
 
@@ -223,7 +211,7 @@
 
 }
 
-\section{Steps to Creating Composite Indicators}
+\section{Steps for Creating Composite Indicators}
 
 \frame{
     \frametitle{Steps for Building Composite Indicators}
@@ -235,7 +223,7 @@
 
         \item Address missing data
 
-        \item Multivariate analysis (note: we don't really cover this in this course)
+        \item Multivariate analysis (note: we don't really much this in this course)
 
         \item Normalisation
 
@@ -281,7 +269,7 @@
 
         \item select a relevant unit of analysis,
 
-        \item link various sub-grous and the underlying indicator.
+        \item link various sub-components and the underlying indicator.
 
     \end{itemize}
 
@@ -294,7 +282,9 @@
 
     \begin{itemize}
 
-        \item should be \emph{statistically independent} of each other (want as few components as possible, don't want to double up),
+        \item should be \emph{statistically independent} of each other (want as few components as possible, don't want to double up. Though can compensate in the weighting stage),
+
+        \vspace{0.5cm}
 
         \item existing \emph{linkages} between them should be \emph{described theoretically and empirically} as much as possible.
 
@@ -428,6 +418,8 @@ Note: NA in R means missing value.
     \begin{itemize}
         \item \emph{Missing at random}: why the variable value is missing has nothing to do with the variable--random.
 
+        \vspace{0.5cm}
+
         \item \emph{Not missing at random}: the variable value is missing because of some reason related to the variable.
 
         \begin{itemize}
@@ -449,7 +441,7 @@ Note: NA in R means missing value.
 
     \vspace{1cm}
 
-    However, if you suspect your data is not missing at random, you should discuss this including the reasons why you believe this.
+    However, if you suspect your data is not missing at random, you should discuss this, including the reasons why you believe the data is not missing at random.
 
 }
 
@@ -461,14 +453,18 @@ Note: NA in R means missing value.
     \begin{itemize}
         \item drop incomplete cases,
 
+        \vspace{0.5cm}
+
         \item single impute data (e.g. replacing the missing value with the variable's mean/median/mode),
+
+        \vspace{0.5cm}
 
         \item multiple impute data (not covered in this course).
     \end{itemize}
 
 }
 
-\section{Analysis of the component structure}
+\section{Analysis of the sub-component structure}
 
 \frame{
     \frametitle{Underlying structure}
@@ -478,7 +474,9 @@ Note: NA in R means missing value.
 
         \vspace{1cm}
 
-        Understanding the underlying structure is important for informing weighting and aggregation decisions.
+        Understanding the underlying structure is important for informing weighting and aggregation decisions, whether or not to include a variable.
+
+        \vspace{0.5cm}
 
         Note: important multivariate analysis tools--e.g. principal component analysis, cluster analysis--are {\large{beyond the scope of this class}}.
     \end{center}
@@ -508,11 +506,52 @@ Note: NA in R means missing value.
 }
 
 \frame{
+    \frametitle{Simple correlation analysis}
+
+    A simple way to examine the relationships between your sub-components is to create a {\large{correlation matrix}}.
+
+    \vspace{0.5cm}
+
+    {\large{Correlation}}: a mutual relationship between two variables.
+
+    \vspace{0.5cm}
+
+    {\large{Correlation coefficient}}: a number ranging from -1 to 1 calculated to represent the linear correlation between two variables. Usually denoted $r$.
+
+    \vspace{0.5cm}
+
+    {\large{Correlation matrix}}: A matrix showing correlations between many variables at once.
+}
+
+\frame{
     \frametitle{Correlation matrix}
 
     \begin{center}
         \includegraphics[scale=0.45]{figures/energy_corr.pdf}
     \end{center}
+
+}
+
+\frame{
+    \frametitle{Rough goal}
+
+    The overall goal is to theoretically understand how the variables are related to each other theoretically and empirically.
+
+    \vspace{0.5cm}
+
+    Roughly {\large{balance}}:
+
+    \begin{itemize}
+        \item not wanting very highly correlated variables, as these indicate duplication
+
+        \begin{center}
+            and
+        \end{center}
+
+        \item not wanting very lowly correlated variables, as this indicates they are related to different concepts.
+    \end{itemize}
+
+    Note: this is a very rough guide. More sophisticated tools await you in later courses.
 
 }
 
@@ -538,10 +577,99 @@ Note: NA in R means missing value.
     Some notation:
 
     \begin{itemzie}
-        \item $x_{i,t}$: Observed variable value for unit $i$ (e.g. country) at time $t$ (e.g. year)
+        \item $x_{u,t}$ observed variable value for unit $u$ (e.g. country) at time $t$ (e.g. year)
 
-        \item $I_{i,t}$ Normalised value of the variable value for unit $i$ at time $t$
+        \item $I_{u,t}$ normalised value of the variable value for unit $u$ at time $t$
     \end{itemize}
+
+}
+
+\frame{
+    \frametitle{Normalising approaches}
+
+    There are many approaches to normalising variables (see OECD 2008, 27-29).
+
+    \vspace{0.5cm}
+
+    Here are two for interval/ratio data \ldots
+
+}
+
+\frame{
+    \frametitle{Min-Max}
+
+    {\large{Min-Max}} rescales a variable to be between 0 and 1 based on the observed minimum and maximum values.
+
+    \begin{equation}
+        I_{u,t} = \frac{x_{u,t} - \mathrm{min}(\mathrm{X})}{\mathrm{max}(\mathrm{X}) - \mathrm{min}(\mathrm{X})}
+    \end{equation}
+
+    where $\mathrm{X}$ are all of the observed values of the variable. (For R students: it is a vector of the values.)
+
+    \vspace{0.5cm}
+
+    Note: extreme values can distort the measure and can widen the range of closely spaced values.
+}
+
+\frame{
+    \frametitle{Z-Score Standardisation}
+
+    Z-Scores create a common scale with a mean of 0 and a standard deviation of 1.
+
+    \begin{equation}
+        I_{u,t} = \frac{x_{u,t} - \mu_{\mathrm{X}}}{\sigma_{\mathrm{X}}}
+    \end{equation}
+
+    where $\mathrm{\mu_{\mathrm{X}}}$ is the mean of the variable and $\sigma_{\mathrm{X}}$ is the standard deviation.
+
+    \vspace{0.5cm}
+
+    Note: extreme values can have a greater effect on the composite indicator.
+
+}
+
+\frame{
+    \frametitle{Direction}
+
+    All of the variables that you think have a ``positive'' influence on the underlying concept need to be positive.
+
+    \vspace{0.5cm}
+
+    All of the variables that you theoretically think have a ``negative'' influence on the underlying concept should be negative.
+
+}
+
+\frame{
+    \frametitle{Need to consider variable direction, example}
+
+    For example, if we want to create a measure of environmental un-sustainability with the components: C0$^2$ Emissions, Population Growth, and Alternative Energy Use.
+
+    \vspace{0.5cm}
+
+    We would expect:
+
+    \begin{itemize}
+
+        \item More C0$^2$ Emissions $\rightarrow$ less sustainable.
+
+        \item More Population Growth $\rightarrow$ less sustainable.
+
+        \item More Alternative Energy Use $\rightarrow$ more sustainable
+
+    \end{itemize}
+
+    So, we need to reverse the scale of our Alternative Energy Use variable
+
+}
+
+\frame{
+    \frametitle{Reverse the direction of a variable}
+
+    To reverse the direction of a variable simply subtract each value by the maximum observed value, i.e.:
+
+    \begin{equation}
+        I_{u,t} = \mathrm{max}(\mathrm{X}) - x_{u,t}
+    \end{equation}
 
 }
 
@@ -550,14 +678,15 @@ Note: NA in R means missing value.
 \frame{
     \frametitle{Why weight?}
 
-    Once you have your normalised variables ($I_{c,t}$), then you need to consider how to {\large{\textbf{combine}}} them.
+    Once you have your normalised variables ($I_{c,t}$), then you need to consider how to {\large{\textbf{aggregate}}} them.
 
-    Things to consider:
+    \vspace{0.5cm}
+
+    Specifically consider:
 
     \begin{itemize}
         \item {\large{\textbf{Weighting}}}: how important are each individual variables to the composite?
 
-        \item What {\large{\textbf{scale}}} do you want the indicator to be on?
     \end{itemize}
 }
 
@@ -578,19 +707,41 @@ Note: NA in R means missing value.
 \frame{
     \frametitle{Equal weighting}
 
-    If you simply {\large{\textbf{add all of the variables}}} together, you are implicitly assuming that they have an {\large{\textbf{equal weight}}} of {\large{\textbf{1}}}.
+    If you simply {\large{\textbf{add all of the variables}}} together, you are implicitly assuming that they have an {\large{\textbf{equal weight}}} of {\large{\textbf{1}}}. E.g.:
 
     \begin{equation}
-        CI_{c,t} = \sum I_{c,t}*1
+        CI_{u,t} = \sum I_{u,t}*1
     \end{equation}
 
-    Sometimes this makes sense: e.g. economic activity is often measured in the same currency.
+    \vspace{0.5cm}
+
+    Sometimes this makes sense: e.g. economic activity is often measured in the same currency, or if you have no prior knowledge about how important each component is.
 
 }
 
 \frame{
     \frametitle{Unequal weighting}
 
+    There are many advanced techniques to determine variable weights (e.g. factor analysis, data envelopment analysis and unobserved components models).
+
+    \vspace{0.5cm}
+
+    In this course we are going to use ``{\large{expert judgement}}'' -- you are the experts and will determine how much each component contributes to the composite indicator.
+
+}
+
+\frame{
+    \frametitle{Expert judgement weights and linear aggregation}
+
+    Imagine that you have four component variables $X_{1}$, $X_{2}$, $X_{3}$ and $X_{4}$.
+
+    \vspace{0.5cm}
+
+    Based on your expert knowledge, you believe that $X_{1}$ is much more important than the other three combined. So you give it a weight of 0.7 and the others 0.1:
+
+    \begin{equation}
+        CI_{u,t} = 0.7x_{1u,t} + 0.1x_{2u,t} + 0.1x_{3u,t} + 0.1x_{4u,t}
+    \end{equation}
 
 }
 
@@ -601,7 +752,7 @@ Note: NA in R means missing value.
 
     \vspace{0.5cm}
 
-    So, you might set a {\LARGE{threshold}}, a point past which a unit goes from having the characteristic to not having the characteristics.
+    So, you might use your expert judgement to set a {\LARGE{threshold}}, a point past which a unit goes from having the characteristic to not having the characteristics.
 
 }
 
@@ -639,7 +790,11 @@ Note: NA in R means missing value.
 
     \vspace{0.5cm}
 
-    You need to conduct numerous tests to determine if your indicator is a {\large{\textbf{valid}}} measure of the concept you are tying to measure.
+    You need to conduct numerous tests to determine if your indicator is a {\large{\textbf{valid}}} measure of the concept you are trying to measure.
+
+    \vspace{0.5cm}
+
+    We will discuss this more in Week 10.
 
 }
 
@@ -658,7 +813,7 @@ Note: NA in R means missing value.
 \frame{
     \frametitle{Uncertainty}
 
-    {\large{\textbf{However}}}, we need to remember that our indicators are {\LARGE{\textbf{estimates}}} of what we want to measure.
+    We need to remember that our indicators are {\LARGE{\textbf{estimates}}} of what we want to measure.
 
     \vspace{0.5cm}
 
@@ -674,7 +829,7 @@ Note: NA in R means missing value.
 
         \item Measurement error in our raw data $x_{c,t}$
 
-        \item Error in our weighting.
+        \item Error in our weighting/aggregation.
 
     \end{itemize}
 
@@ -728,7 +883,7 @@ Note: NA in R means missing value.
 
     \vspace{0.5cm}
 
-    However, when you should be {\large{careful and honest when you compare units by ranking}} their composite scores.
+    However, you should be {\large{careful and honest when you compare units by ranking}} their composite scores.
 
     \vspace{0.5cm}
 
@@ -741,12 +896,12 @@ Note: NA in R means missing value.
 
     \begin{table}
         {\footnotesize{
-        \begin{tabular}{p{4cm} p{4cm}}
+        \begin{tabular}{p{4.5cm} p{4.5cm}}
             Pros & Cons \\
             \hline\hline \\[0.1cm]
-            Summarise complex multi-dimensional concepts & May be misleading if poorly constructed/non-transparent/interpreted \\[0.1cm]
-            Support policy-making & May lead to simplistic policy conclusions or missed to support particular predefined policy goal \\[0.1cm]
-            Facilitate communication with the public. & May disguise problems in one dimension if construction is not transparent. \\[0.1cm]
+            Summarise complex multi-dimensional concepts so that we can understand relationships between them & May be misleading if poorly constructed \& non-transparent \\[0.3cm]
+            Support policy-making & May lead to simplistic policy conclusions or missed to support particular predefined policy goal \\[0.3cm]
+            Facilitate communication with the public. & May disguise problems in one dimension if construction is not transparent. \\[0.3cm]
              & May exaggerate differences between units if uncertainty is not acknowledged.\\[0.1cm]
 
             \hline
@@ -754,7 +909,7 @@ Note: NA in R means missing value.
         }}
     \end{table}
 
-    Partially from OECD (2008)
+    {\tiny{Partially from OECD (2008, 13-14)}}
 
 }
 
