@@ -1,5 +1,5 @@
 ---
-title: 'SG1022 Seminar 2: R BootCamp (2)'
+title: 'SG1022 Seminar 3: Developing Composite Indicators'
 author: "Christopher Gandrud"
 date: "2016"
 output:
