@@ -16,9 +16,9 @@ output:
 
 - Dealing with missing data
 
-- Correlation--statistics and plots
+- Correlation (statistics and plots)
 
-- Rescaling
+- Rescaling (with functions)
 
 - Weighting and Aggregating
 
@@ -34,7 +34,7 @@ output:
 
 ## World Development Indicators
 
-You can also load data stored remotely (on another computer) into R. There are many ways to do this, depending on the data source.
+You can also load data stored **remotely** (on another computer) into R. There are many ways to do this, depending on the data source.
 
 Today we will download data from the World Bank's [World Development Indicators](http://data.worldbank.org/indicator) using the [WDI](https://github.com/vincentarelbundock/WDI) package.
 
@@ -64,11 +64,11 @@ head(fdi)
 
 ## Some cleaning
 
-We probably want to do some cleaning of this data set:
+We probably want to do some **cleaning** of this data set:
 
-- Rename the indicator to something that is more intuitive.
+- **Rename** the indicator to something that is more intuitive.
 
-- Remove units that are not countries (e.g. 'Arab World')
+- **Remove** units that are not countries (e.g. 'Arab World').
 
 ## Renaming variables
 
@@ -102,7 +102,7 @@ regions <- unique(fdi$iso2c[grep('[0-9]', fdi$iso2c)])
 regions <- c(regions, fdi$iso2c[grep('^[XZ]', fdi$iso2c)])
 regions <- c(regions, 'EU', 'OE')
 
-# Keep rows with iso2c codes that do not begin with a number
+# Keep rows with iso2c codes that are not regions
 fdi <- subset(fdi, !(iso2c %in% regions))
 
 head(fdi)
@@ -110,7 +110,7 @@ head(fdi)
 
 ## <i class="fa fa-arrow-up"></i> Advanced: Regex
 
-If you are interested: we use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) to select character strings with certain characteristics (e.g. `[0-9]`, `[^[XZ]]`).
+If you're interested: we use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) to select character strings with certain characteristics (e.g. `[0-9]`, `[^[XZ]]`).
 
 Note: regular expressions are very powerful, but also can take awhile to learn.
 
@@ -131,11 +131,13 @@ names(wdi)
 ## Cleaning code for reference
 
 ```{r}
+library(dplyr) # contains rename and %>% functions
+
+# Remove unwanted regions
 regions <- unique(wdi$iso2c[grep('[0-9]', wdi$iso2c)])
 regions <- c(regions, wdi$iso2c[grep('^[XZ]', wdi$iso2c)])
 regions <- c(regions, 'EU', 'OE')
 
-# Keep rows with iso2c codes that do not begin with a number
 wdi <- subset(wdi, !(iso2c %in% regions))
 
 # Rename indicators
@@ -407,9 +409,9 @@ ggplot(fdi_rev, aes(value, group = version)) +
 
 ## <i class="fa fa-plus"></i> Weight/Aggregate
 
-Once we have our rescaled components, we then decide on how to weight and aggregate our indicators.
+Once we have our rescaled components, we then decide how to weight and aggregate our indicators.
 
-For this class you will use 'expert-judgement'.
+For this course you will use '**expert-judgement**'.
 
 ## <i class="fa fa-plus"></i> Weight/Aggregate example
 
@@ -427,9 +429,13 @@ for (i in indicators_environ) {
 wdi_sub$alternative_energy <- reverse_direction(wdi_sub$alternative_energy)
 ```
 
-Imagine we have four variables that we want to combine into our environmental unsustainability index: `electricity_use`, `co2_emissions`, `population_growth`, and `alternative_energy`.
+Imagine we have four variables that we want to combine into an Environmental Unsustainability index: `electricity_use`, `co2_emissions`, `population_growth`, and `alternative_energy`.
 
-We have use z-scores to rescale them and reversed the direction of `alternative_energy`. The results are in a data frame called `wdi_sub`.
+We have use z-scores to rescale them and reversed the direction of `alternative_energy`. 
+
+The results are in a data frame called `wdi_sub`.
+
+## <i class="fa fa-plus"></i> Weight/Aggregate example
 
 We think that `co2_emissions` is particularly important so we give it a weighting of 0.3, the others have a weighting of 0.1:
 
@@ -474,7 +480,7 @@ wdi_2011 <- subset(wdi_sub, year == 2011)
 library(googleVis)
 
 map <- gvisGeoChart(wdi_2011, locationvar = "country",
-                 colorvar = "unsustainability")
+                    colorvar = "unsustainability")
 ```
 
 ## <i class="fa fa-map-o"></i> Map the index
@@ -485,6 +491,9 @@ plot(map)
 
 ![index-map](img/unsustainable_map.png)
 
+## Experiment 
+
+It is important to **try and compare** multiple weighting schemes to examine how sensitive the index is to each one.
 
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Seminar: Make an Index
