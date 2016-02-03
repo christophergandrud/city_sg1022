@@ -1,0 +1,644 @@
+---
+title: 'SG1022 Seminar 2: Composite Indicators'
+author: "Christopher Gandrud"
+date: "2016"
+output:
+  ioslides_presentation:
+    css: https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css
+    logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
+  beamer_presentation: default
+  slidy_presentation: default
+---
+
+```{r include = FALSE}
+library(dplyr)
+```
+
+## <i class="fa fa-arrow-circle-o-up"></i> Objectives
+
+- Review R basics
+
+- R example data sets
+
+- Simple descriptive statistics,
+
+- (Some) inferential statistics,
+
+- Basic plots
+
+- (A few) programming best practices
+
+## <i class="fa fa-check"></i> Pop Quiz
+
+## <i class="fa fa-table"></i> R's build-in data sets
+
+List internal (example) data sets:
+
+```{r eval=FALSE}
+data()
+```
+
+Load **swiss** data set:
+
+```{r}
+data(swiss)
+```
+
+Find data description:
+
+```{r, eval=FALSE}
+?swiss
+```
+
+## <i class="fa fa-table"></i> R's build-in data sets
+
+Find variable names:
+
+```{r}
+names(swiss)
+```
+
+See the first three rows and four columns
+
+```{r}
+head(swiss[1:3, 1:2])
+```
+
+## Note on Example data sets {.flexbox .vcenter}
+
+Note, these dat sets are just for examples, you will **not use** them in your group projects.
+
+## <i class="fa fa-area-chart"></i> Descriptive statistics: review
+
+**Descriptive Statistics:** describe samples
+
+Stats 101: describe sample **distributions** with appropriate measure of:
+
+- **central tendancy**
+
+- **variability**
+
+## <i class="fa fa-area-chart"></i> Histograms
+
+```{r}
+hist(swiss$Examination)
+```
+
+## <i class="fa fa-area-chart"></i> Histograms: styling
+
+```{r}
+hist(swiss$Examination,
+     main = 'Swiss Canton Draftee Examination Scores (1888)',
+     xlab = '% receiving highest mark on army exam')
+```
+
+## Finding means
+
+```{r}
+mean(swiss$Examination)
+```
+
+If you have missing values (`NA`):
+
+```{r}
+mean(swiss$Examination, na.rm = TRUE)
+```
+
+## Other functions for central tendency
+
+**Median**
+
+```{r}
+median(swiss$Examination)
+```
+
+**Mode**
+
+`mode` is not an R function to find the statistical mode.
+
+Instead use `summary` for factor nominal variables or make a bar chart.
+
+## Simple bar chart for nominal
+
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+devtools::source_url('http://bit.ly/OTWEGS')
+plot(MortalityGDP$region, xlab = 'Region')
+```
+
+## Using `summary`
+
+You can also use the `summary` function to examine your data.
+
+```{r}
+summary(swiss$Examination)
+```
+
+
+## Variation
+
+Variation is "perhaps the **most important quantity** in statistical analysis. The greater the variability in the data, the greater will be our **uncertainty** in the values of the parameters estimated . . . and the **lower our ability to distinguish between competing hypotheses**" (Crawley 2005, 33)
+
+
+## Variation
+
+**Range:**
+
+```{r}
+range(swiss$Examination)
+```
+
+**Quartiles:**
+
+```{r}
+summary(swiss$Examination)
+```
+
+## Variation
+
+**Interquartile Range ($IQR = Q_{3} - Q_{1}$):**
+
+```{r}
+IQR(swiss$Examination)
+```
+
+## Variation
+
+**Boxplots:**
+
+```{r}
+boxplot(swiss$Examination, main = '% of Draftees with Highest Mark')
+```
+
+## Variation: Standard Deviation
+
+Use standard deviation **($s$)** to put variance in terms of the mean:
+
+$$s = \sqrt{s^2}$$
+
+```{r}
+sd(swiss$Examination)
+```
+
+
+## Playing with distributions
+
+Simulated normally distributed data with SD of 30 and mean 50
+
+```{r}
+Normal30 <- rnorm(1e+6, mean = 50, sd = 30)
+```
+
+```{r, echo=FALSE, message=FALSE}
+# Helpful information from StackExchange discussion
+# http://stackoverflow.com/questions/3494593/shading-a-kernel-density-plot-between-two-points?lq=1
+# Load zoo package
+library(zoo)
+library(ggplot2)
+
+# Convert to data frame
+Normal30 <- data.frame(Normal30)
+
+# Find density for +/- 1 SD
+DensityLower <- density(Normal30$Normal30, from = 20, to = 50)
+DensityUpper <- density(Normal30$Normal30, from = 50, to = 80)
+
+# Extract density values (y values)
+YLower <- DensityLower$y
+YUpper <- DensityUpper$y
+
+# Extract x values
+XLower <- DensityLower$x
+XUpper <- DensityUpper$x
+
+# Merge vectors into data frames
+Lower <- data.frame(YLower, XLower)
+Upper <- data.frame(YUpper, XUpper)
+
+# Add zero variable so that the shaded area goes down to 0
+Lower$Zero <- 0
+Upper$Zero <- 0
+
+# Upper and Lower colours
+LowerC <- "#80B2CD"
+UpperC <- "#4F6F80"
+
+# Create density plot
+ggplot(Normal30, aes(x = Normal30)) +
+        geom_density() +
+        geom_ribbon(data = Lower, aes(x = XLower, ymax = YLower, ymin = Zero),
+                    fill = LowerC, alpha = 0.4) +
+        geom_ribbon(data = Upper, aes(x = XUpper, ymax = YUpper, ymin = Zero),
+                    fill = UpperC, alpha = 0.4) +
+        geom_vline(xintercept = 50, colour = "red", linetype = "longdash") +
+        annotate("text", x = 25, y = 0.015, label = "-1 SD", colour = LowerC) +
+        annotate("text", x = 75, y = 0.015, label = "+1 SD", colour = UpperC) +
+        scale_y_continuous(limits = c(0, 0.02)) +
+        scale_x_continuous(breaks = c(-90, -50, 0, 20, 50, 80, 100, 150, 185),
+                           labels = c(-90, -50, 0, 20, 50, 80, 100, 150, 185)) +
+        xlab("\n Simulated Data") + ylab("Density\n") +
+        theme_bw()
+```
+
+## Transform skewed data
+
+Highly skewed data can be transformed to have a normal distribution.
+
+
+Helps correct two violations of key assumptions: (a) non-linearity and (b) heteroskedasticity.
+
+```{r, fig.height=3}
+hist(swiss$Education, main = '')
+```
+
+## Preview: Natural log transformed skewed data
+
+```{r}
+hist(log(swiss$Education), main = "Swiss Education")
+```
+
+## Transformations
+
+The natural log transformation is only useful for data that **does not contain zeros**.
+
+See <http://robjhyndman.com/hyndsight/transformations/> for suggestions on other
+transformations such as Box-Cox and Inverse Hyperbolic Sine.
+
+## Joint distributions (continuous variables)
+
+```{r}
+plot(log(swiss$Education), swiss$Examination)
+```
+
+## Preview: Summarise with correlation coefficients
+
+```{r}
+cor.test(log(swiss$Education), swiss$Examination)
+```
+
+## Preview: Summarise with loess
+
+```{r, message=FALSE}
+ggplot2::ggplot(swiss, aes(log(Education), Examination)) +
+    geom_point() + geom_smooth() + theme_bw()
+```
+
+## A more systematic introduction to ggplot2
+
+<br>
+<br>
+<br>
+
+"gg" means "Grammar of Graphics".
+
+"2" just means that it is the second one.
+
+## ggplot2 syntax
+
+Each plot is made of **layers**. Layers include the coordinate system (x-y), points,
+labels, etc.
+
+Each layer has **aesthetics** (`aes`) including the x & y, size, shape, and colour.
+
+The **main layer types** are called **geometrics** (`geom`). These include
+lines, points, density plots, bars, and text.
+
+## ggplot2 examples setup
+
+```{r, message=FALSE, warning=FALSE}
+library(devtools)
+library(ggplot2)
+
+source_url("http://bit.ly/OTWEGS")
+
+# Create data with no missing values of infant mortality
+InfantNoMiss <- subset(MortalityGDP,
+                           !is.na(InfantMortality))
+
+# Create High/Low Income Variable
+InfantNoMiss$DumMort[InfantNoMiss$InfantMortality
+                     >= 15] <- "high"
+InfantNoMiss$DumMort[InfantNoMiss$InfantMortality
+                     < 15] <- "low"
+```
+
+## Simple example
+
+```{r, warning=FALSE}
+ggplot(data = MortalityGDP, aes(x = InfantMortality,
+        y = GDPperCapita)) + geom_point()
+```
+
+## Simple example with BW theme
+
+```{r warning=FALSE}
+ggplot(data = MortalityGDP, aes(x = InfantMortality,
+        y = GDPperCapita)) + geom_point() + theme_bw(base_size = 13)
+```
+
+## Colours
+
+<br>
+<br>
+
+There are a number of ways to specify colours in ggplot2.
+
+The simplest way is to let ggplot choose the colours for you.
+
+---
+
+```{r warning=FALSE}
+ggplot(data = InfantNoMiss, aes(log(InfantMortality),
+                                log(GDPperCapita))) +
+      geom_point(aes(colour = income)) +
+      theme_bw()
+```
+
+## Selecting colours
+
+There are many ways to pick specific colors.
+
+In this class we will mainly use **hexadecimal** colours.
+
+This is probably the most commonly used system for choosing
+colours on the web.
+
+Every colour is given six digits.
+
+A good website for getting hexadecimal colour schemes is:
+<http://colorbrewer2.org/>.
+
+---
+
+```{r eval=FALSE}
+# Create colour vector
+Colours <- c("#1B9E77", "#D95F02", "#7570B3",
+             "#E7298A", "#66A61E", "#E6AB02")
+
+# Create graph
+ggplot(data = InfantNoMiss,
+                    aes(log(InfantMortality),
+                        log(GDPperCapita))) +
+        geom_point(aes(colour = income)) +
+        scale_color_manual(values = Colours) +
+        xlab("\nLog Infant Mortality") +
+        ylab("Log GDP/Capita\n") +
+        ggtitle("Log Transformed Data\n") +
+        theme_bw()
+```
+
+---
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+# Create colour vector
+Colours <- c("#1B9E77", "#D95F02", "#7570B3",
+             "#E7298A", "#66A61E", "#E6AB02")
+# Create graph
+ggplot(data = InfantNoMiss,
+                    aes(log(InfantMortality),
+                        log(GDPperCapita))) +
+        geom_point(aes(colour = income)) +
+        scale_color_manual(values = Colours) +
+        xlab("\nLog Infant Mortality") +
+        ylab("Log GDP/Capita\n") +
+        ggtitle("Log Transformed Data\n") +
+        theme_bw()
+```
+
+## ggplot2 is very flexible
+
+```{r eval=FALSE}
+# Create a violin Plot
+ggplot(InfantNoMiss, aes(factor(DumMort),
+                        log(GDPperCapita))) +
+          geom_violin(fill = "#E7298A",
+                      colour = "#E7298A",
+                      alpha = I(0.5)) +
+          geom_jitter(color = "#7570B3") +
+          xlab("\n Infant Mortality") +
+          ylab("Log GDP Per Capital\n") +
+          theme_bw(base_size = 16)
+```
+
+---
+
+```{r message=FALSE, echo=FALSE, warning=FALSE}
+# Create a violin Plot
+ggplot(InfantNoMiss, aes(factor(DumMort),
+                        log(GDPperCapita))) +
+          geom_violin(fill = "#E7298A",
+                      colour = "#E7298A",
+                      alpha = I(0.5)) +
+          geom_jitter(color = "#7570B3") +
+          xlab("\n Infant Mortality") +
+          ylab("Log GDP Per Capital\n") +
+          theme_bw(base_size = 16)
+```
+
+## Programming Hint (1)
+
+Google is your friend!
+
+If you have a question, someone else has probably asked it before.
+
+## Programming Hint (2)
+
+<i class="fa fa-exclamation"></i><i class="fa fa-exclamation">
+</i><i class="fa fa-exclamation"></i> ***Always close!***
+
+In R this means closing:
+
+- `()`
+
+- `[]`
+
+- `{}`
+
+- `''`
+
+- `""`
+
+## Programming Hint (3)
+
+There are usually **many ways to achieve the same goal**, but . .
+
+make your code as **simple as possible**.
+
+- Easier to read.
+
+- Easier to write (ultimately).
+
+- Easier to find mistakes.
+
+- Often computationally more efficient.
+
+One way to do this is to **define things once**--e.g. use variables to contain
+values and custom functions to contain multiple sequential function calls.
+
+## Programming Hint (3)
+
+**Bad**
+
+```{r}
+mean(rnorm(1000))
+
+sd(rnorm(1000))
+```
+
+## Programming Hint (3)
+
+**Good**
+
+```{r}
+rand_sample <- rnorm(1000)
+
+mean(rand_sample)
+
+sd(rand_sample)
+```
+
+## <i class="fa fa-arrow-circle-o-up"></i> Seminar: Use R!
+
+- Load the `USArrests` data set:
+
+```{r}
+us_arrests <- USArrests
+```
+
+For more information use `?USArrests`
+
+- Find appropriate summary statistics/summary plots for the variables in this data frame.
+
+- Does there appear to be an association between a states' urban population and arrest rates?
+
+# <i class="fa fa-arrow-up"></i> Advanced (if you're interested)
+
+## Variation: Sum of Squares
+
+**Sum of squares** (summing deviations from the mean):
+
+$$\mathrm{Sum\:of\:Squares} = \sum(x - \bar{x})^2$$
+
+- But sum of squares always gets bigger with a larger sample size.
+
+    + Unless the new values exactly equal the mean.
+
+## Variation: Degrees of Freedom
+
+**Degrees of freedom** (number of values that are free to vary):
+
+For the mean:
+
+$$\mathrm{df} = n - 1$$
+
+Why?
+
+For a given mean and sample size, $n - 1$ values can vary, but the $n$th
+value must always be the same. See Crawley (2005, 36-37).
+
+## Variation: Variance
+
+We can use degrees of freedom to create an "unbiased" measure of variability
+that is not dependent on the sample size.
+
+**Variance ($s^2$):**
+
+$$
+s^2 = \frac{\mathrm{Sum\:of\:Squares}}{\mathrm{Degrees\:of\:Freedom}} =
+\frac{\sum(x - \bar{x})^2}{n - 1}
+$$
+
+But this is not in the same units as the mean, so it can be confusing to
+interpret.
+
+## Variation: Standard Deviation
+
+Use standard deviation **($s$)** to put variance in terms of the mean:
+
+$$s = \sqrt{s^2}$$
+
+## Variation: Standard Error
+
+The **standard error** of the mean:
+
+If we think of the variation around a central tendency as a measure of the
+**unreliability** of an estimate (mean) in a population,
+then we want the measure to **decrease as the sample size goes up**.
+
+$$
+\mathrm{SE}_{\bar{x}} = \sqrt{\frac{s^{2}}{n}}
+$$
+
+Note: $\sqrt{}$ so that the dimensions of the measure of unreliability and the
+parameter whose variability is being measured are the same.
+
+Good overview of variance, degrees of freedom, and standard errors in Crawley
+(2005, Ch. 4).
+
+## Variation: Variance and Standard Deviation
+
+**Variance:**
+
+```{r}
+var(swiss$Examination)
+```
+
+**Standard Deviation:**
+
+```{r}
+sd(swiss$Examination)
+```
+
+## Variation: Standard Error
+
+**Standard Error:**
+
+```{r}
+sd_error <- function(x) {
+    sd(x) / sqrt(length(x))
+}
+
+sd_error(swiss$Examination)
+```
+
+## <i class="fa fa-arrow-up"></i> Advance: Creating Functions
+
+You can create a function to find the sample mean
+($\bar{x} = \frac{\sum x}{n}$) of a vector.
+
+```{r}
+fun_mean <- function(x){
+    sum(x) / length(x)
+}
+
+## Find the mean
+fun_mean(x = swiss$Examination)
+```
+
+## <i class="fa fa-arrow-up"></i> Why create functions?
+
+Functions:
+
+- Simplify your code if you do repeated tasks.
+
+- Lead to fewer mistakes.
+
+- Are easier to understand.
+
+- Save time over the long run--a general solution to problems in different
+contexts.
+
+## <i class="fa fa-arrow-up"></i> Advanced: Loops
+
+You can 'loop' through the data set to find the mean for each column
+
+```{r}
+library(dplyr)
+
+for (i in 1:length(names(swiss))) {
+    swiss[, i] %>%
+    mean() %>%
+    round(digits = 1) %>%
+    paste(names(swiss)[i], ., '\n') %>%  # the . directs the pipe
+    cat()
+}
+```

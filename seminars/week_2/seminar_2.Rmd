@@ -1,24 +1,28 @@
 ---
-title: 'SG1022 Seminar 2: Using survey data'
+title: 'SG1022 Seminar 2: Composite Indicators'
 author: "Christopher Gandrud"
-date: '2016'
+date: "2016"
 output:
   ioslides_presentation:
     css: https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css
     logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
+  beamer_presentation: default
+  slidy_presentation: default
 ---
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
 
-- Understanding files paths (conventions, best practices)
+- Getting (local) data into R
 
-- Accessing the file system from R
+- Getting data into R from the World Bank Development Indicators with `WDI`
 
-- Loading files with the `rio` package.
+- Dealing with missing data
 
-- Working with factors (categorical data)
+- Correlation--statistics and plots
 
-- Using R to analyse surveys (contingency tables, )
+- Rescaling
+
+- Weighting and Aggregating
 
 ## <i class="fa fa-check"></i> Pop Quiz
 
@@ -45,12 +49,9 @@ output:
     + Clearest way of explicitly stating links is **dynamically** using file
     paths in your source code.
 
-- **The software tools of really reproducible research**: R, RMarkdown, LaTeX, etc.
-    all require you to explicitly state file paths.
-
 - **You**: well organised files will be easier for you to find/understand/use
     in the future.
-    
+
 
 ## <i class="fa fa-folder-open-o"></i> File paths
 
@@ -134,12 +135,12 @@ setwd('/')
 Use **relative file paths** when possible.
 
 - **Absolute file path**: the entire path on a particular system,
-    + E.g. `/git_repos/Project1/Paper.Rmd`
+    + E.g. `/git_repos/Project1/data.csv`
 
 - **Relative file path**: the path relative to the working directory.
 
     + E.g. if `/git_repos` is the working directory then the relative path for
-    `Paper.Rmd` is `Project1/Paper.Rmd`.
+    `data.csv` is `Project1/data.csv`.
 
 Why?
 
@@ -161,9 +162,9 @@ Alternatives:
 
 ## Loading data into R
 
-R can load data from many different file formats (e.g. .sav (SPSS), .xlsx (Excel), .dta (Stata), .csv, and so on).
+R can load data from many different file formats (e.g. .sav (SPSS), .xlsx (Excel), .dta (Stata), .csv).
 
-The [rio](https://github.com/leeper/rio) (R input/output) package makes it very easy to import many different types of data. 
+The [rio](https://github.com/leeper/rio) (R input/output) package makes it very easy to import many different types of data.
 
 It has two key functions `import` and `export`.
 
@@ -173,192 +174,430 @@ It has two key functions `import` and `export`.
 library(rio)
 setwd('/git_repositories/city_sg1022/seminars/week_2/data/')
 
-# Load ESS5 (UK only) survey data in SPSS format
-ess5_uk <- import('ESS5_UKonly.sav')
+# Load DPI 2012 data in Stata format
+dpi <- import('dpi2012.dta')
 
-head(ess5_uk[1:3, 1:6])
+head(dpi[1:3, 1:6])
 ```
 
-# Note: Always look at the data you imported to see if it is what you think you imported/if it needs cleaning.
+# Note: Always look at the data you imported to see if it's what you think you imported/see what needs cleaning.
 
 ## Rio `export` for saving data
 
-We can save the `ess5_uk` data into another format (.csv "Comma Separated Values").
+We can save the `dpi` data into another format. For example, .csv "Comma Separated Values". Just add the csv file extension to the file name and rio does the rest.
 
 ```{r, eval=FALSE}
-export(ess5_uk, 'ESS5_UKonly.csv')
+export(dpi, 'dpi2012.csv')
 ```
 
-## Review: factors (categorical data)
+## World Development Indicators
 
-In R, categorical data is coded using *factors*.
+You can also load data stored remotely (on another computer) into R. There are many ways to do this, depending on the data source.
 
-Imagine we have a data with three categories:
+Today we will download data from the World Bank's [World Development Indicators](http://data.worldbank.org/indicator) using the [WDI](https://github.com/vincentarelbundock/WDI) package.
 
-| Number Code | Label         |
-| ----------- | ------------- |
-| 1           | Low income    |
-| 2           | Medium income |
-| 3           | High income   |
+## Find WDI Indicator ID
 
-## Factors
+-  **Go** the the World Bank's website: <http://data.worldbank.org/indicator>.
 
-Imagine data is loaded into R just with the numbers:
+- **Click** on the indicator you are interested in.
 
-```{r include=FALSE}
-library(randomNames)
-persons <- randomNames(n = 1000)
-income <- sample(1:3, size = 1000, replace = T)
-ex_income <- data.frame(persons, income)
-ex_income$persons <- as.character(ex_income$persons)
+- **Copy** the indicator ID. Example for *Foreign Direct Investment*:
+
+![indicator_id](img/wdi_indicator_id.png)
+
+## Download WDI
+
+Now use the `WDI` function to download the indicator:
+
+```{r message=FALSE, cache=TRUE}
+# Load WDI package
+library(WDI)
+
+# Download data. Place in new object called fdi
+fdi <- WDI(indicator = 'BX.KLT.DINV.CD.WD', start = 1990, end = 2014)
+
+head(fdi)
 ```
 
-```{r}
-head(ex_income)
-```
+## Some cleaning
 
-## Factor labels
+We probably want to do some cleaning of this data set:
 
-To convert this variable to a factor and add labels use `factor`.
+- Rename the indicator to something that is more intuitive.
 
-```{r}
-income_labels <- c('Low income', 'Medium income', 'High income')
+- Remove units that are not countries (e.g. 'Arab World')
 
-ex_income$income <- factor(ex_income$income, labels = income_labels)
+## Renaming variables
 
-summary(ex_income$income)
-```
-
-## Converting from character strings to factors (1)
-
-Sometimes you will have data that is in character strings (R sees letters, but doesn't see any categories), but you want it to be categorical.
-
-```{r}
-summary(ex_income$persons)
-```
-
-## Converting from character strings to factors (2)
-
-Simply run it through `as.factor`. R will turn it into a factor and use the character strings as factor labels.
-
-```{r}
-ex_income$persons <- as.factor(ex_income$persons)
-
-summary(ex_income$persons)
-
-```
-
-## Frequency table (categorical variables)
+To rename variables in a data frame use the `rename` function from the [dplyr](https://github.com/hadley/dplyr) package.
 
 ```{r, message=FALSE}
-library(MASS)
-smoking_freq <- table(survey$Smoke)
-smoking_freq
+library(dplyr)
+
+fdi <- rename(fdi, foreign_direct_investment = BX.KLT.DINV.CD.WD)
+
+head(fdi)
 ```
 
-## Joint distributions (categorical variables)
+## Removing non-countries (1)
 
-Contingency table
-```{r}
-smoking <- table(survey$Smoke, survey$Exer)
-smoking
-```
+All countries have an [ISO 2 Letter Country Code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). These include 2 letters.
 
-## Reorder factors
+`iso2c` codes have patterns that we can use to select specific types of units.
 
-You may want to **change the order** of a factor's variable's levels so that makes more substantive sense.
+- Regions (like 'Arab World') have `iso2c` codes that begin or end with a number.
 
-```{r}
-# Relevel
-survey$Smoke <- factor(survey$Smoke, 
-                       levels = c('Never', 'Occas', 'Regul', 'Heavy'))
-survey$Exer <- factor(survey$Exer, levels = c('None', 'Some', 'Freq'))
+- Economic groupings (Euroarea, Heavily indebted poor countries, etc) have `iso2c` letter codes beginning with X and Z (XC, XE, etc).
 
-# Re-create table
-smoking <- table(survey$Smoke, survey$Exer)
-smoking
-```
+- Finally, we want to drop the EU (EU) and OECD (OE) in order to not double count units. . .
 
-## Cross-tabs with proportions
+## Removing non-countries (3)
 
 ```{r}
-prop.table(smoking, margin = 1) # row proportions
+# Create vector of all iso2c codes for units we don't want
+regions <- unique(fdi$iso2c[grep('[0-9]', fdi$iso2c)])
+regions <- c(regions, fdi$iso2c[grep('^[XZ]', fdi$iso2c)])
+regions <- c(regions, 'EU', 'OE')
 
-prop.table(smoking, margin = 2) # column proportions
+# Keep rows with iso2c codes that do not begin with a number
+fdi <- subset(fdi, !(iso2c %in% regions))
+
+head(fdi)
 ```
 
-## Plotting (grouped bar chart)--Base R
+## <i class="fa fa-arrow-up"></i> Advanced: Regex
+
+If you are interested: we use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) to select character strings with certain characteristics (e.g. `[0-9]`, `[^[XZ]]`).
+
+Note: regular expressions are very powerful, but also can take awhile to learn.
+
+## Download multiple WDI indicators
+
+We can download multiple indicators at once. To do this simply create a **vector of ID code strings**:
+
+```{r, cache=TRUE}
+indicators <- c('EN.ATM.METH.KT.CE', 'EG.USE.ELEC.KH.PC',
+                         'EN.ATM.CO2E.PC', 'SP.POP.GROW',
+                         'EG.USE.COMM.CL.ZS')
+
+wdi <- WDI(indicator = indicators, start = 1990, end = 2014)
+
+names(wdi)
+```
+
+## Missing Data
+
+Remember that in R, missing data is usually coded `NA`. Note that sometimes data set creators also use other codes, such as `-999`.
+
+A good first step for exploring missing data is to use the `summary` function, which gives you a count of the number of NA's. It will also help you identify if there are any `-999` codes, i.e. likely by showing unintuitive `min` and `max` values.
 
 ```{r}
-barplot(smoking, beside = TRUE, xlab = 'Excercise Frequency',
-    col = c('darkgreen', 'coral', 'coral2', 'coral4'),
-    legend = rownames(smoking), args.legend = list(title = 'Smoking'))
+summary(fdi$foreign_direct_investment)
 ```
 
-## Colours in R
+## Look at the data
 
-For a list of R colour names see: <http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf>
+Always take a look at your data to get a sense of the distribution of missing values. Maybe spot why values are missing.
 
-## Plotting Percentages--Base R (1)
+![missing-look](img/look_at_missing.png)
 
-To plot proportions (easier for cross-group comparability), first create a table of the proportions.
+## Recode special values to NA
+
+Special codes like `-999` often indicate specific reasons for missing data. You should take the time to **understand the substantive meaning** of these codes.
+
+Ultimately, you may want to convert these into `NA` for analysis.
+
+For example, imagine we have a data frame called `survey` and we want to recode all `-999` values of some variable called `trust` as `NA`
+
+```{r eval=FALSE}
+data$trust[data$trust == -999] <- NA
+```
+
+## Dropping observations with missing data (1)
+
+You can drop observations with missing values on **one** variable with `subset`:
+
+```{r, eval=FALSE}
+fdi <- subset(fdi, is.na(foreign_direct_investment))
+```
+
+## Dropping observations with missing data (2)
+
+You can drob missing data on **multiple variables** with the `DropNA` function from the [DataCombine](https://github.com/christophergandrud/DataCombine) package.
 
 ```{r}
-prop_smoking <- prop.table(smoking, margin = 2) # column proportion
+library(DataCombine)
 
-prop_smoking
+# Remember we created the vector of indicator names earlier
+wdi <- DropNA(wdi, Var = indicators)
 ```
 
-## Plotting Percentages--Base R (2)
+Use this to get **complete cases** for your composite indicator.
+
+## Single impute missing values
+
+Once you have analysed the reasons for your missing data, it **may** be reasonable to single impute values rather than drop cases.
+
+For example, maybe it is reasonable to replace `NA` values with the variable `mean`:
+
+```{r, eval=FALSE}
+fdi$foreign_direct_investment[
+                        is.na(fdi$foreign_direct_investment)] <-
+                    mean(fdi$foreign_direct_investment, na.rm = TRUE)
+```
+
+**Note:** these decisions need to be **fully justified**.
+
+## <i class="fa fa-balance-scale"></i> Rescaling
+
+As we discussed in the lecture, there are multiple ways you can rescale your component variables so that they are all on the same scale, e.g. **Min-Max**, and **Z-Scores**.
+
+Before we learn these specific tools, let's learn a powerful new capability: creating your own functions.
+
+## <i class="fa fa-arrow-up"></i> Creating Functions
+
+Use the `function` function to create new functions!
+
+E.g. we can create a function to find the sample mean
+($\bar{x} = \frac{\sum x}{n}$) of a vector.
 
 ```{r}
-barplot(prop_smoking, beside = TRUE, xlab = 'Excercise Frequency',
-    col = c('darkgreen', 'coral', 'coral2', 'coral4'),
-    legend = rownames(smoking), args.legend = list(title = 'Smoking'))
+fun_mean <- function(x){
+    sum(x) / length(x)
+}
+
+## Find the mean
+fun_mean(x = swiss$Examination)
 ```
 
-## Plotting Percentages--Base R (1)
+## <i class="fa fa-arrow-up"></i> Why create functions?
 
-To plot proportions (easier for cross-group comparability), first create a table of the proportions.
+Functions:
+
+- Simplify your code if you do repeated tasks.
+
+- Lead to fewer mistakes.
+
+- Are easier to understand.
+
+- Save time over the long run--a general solution to problems in different
+contexts.
+
+## <i class="fa fa-balance-scale"></i> Min-Max function
+
+To create a function to do Min-Max rescaling remember the equation:
+
+$$
+I_{u,t} = \frac{x_{u,t} - \mathrm{min}(\mathrm{X})}{\mathrm{max}(\mathrm{X}) - \mathrm{min}(\mathrm{X})}
+$$
+
+So the R function would be:
 
 ```{r}
-# Convert to percentages
-perc_smoking <- prop_smoking * 100
-
-perc_smoking
+min_max <- function(x) {
+            (x - min(x, na.rm = T))/
+            (max(x, na.rm = T) - min(x, na.rm = T))
+}
 ```
 
-## Plotting Percentages--Base R (2)
+## <i class="fa fa-balance-scale"></i> Min-Max rescale
+
+Now use the function:
 
 ```{r}
-barplot(perc_smoking, beside = TRUE, xlab = 'Excercise Frequency',
-    col = c('darkgreen', 'coral', 'coral2', 'coral4'),
-    legend = rownames(smoking), args.legend = list(title = 'Smoking'))
-```
-
-## Joint distributions (categorical variables)
-
-$\chi^2$ Test
-```{r, warning=FALSE}
-chisq.test(smoking)
+fdi$fdi_min_max <- min_max(fdi$foreign_direct_investment)
 
 ```
 
-## <i class="fa fa-arrow-circle-o-up"></i> Seminar: Work with example survey data
+## <i class="fa fa-balance-scale"></i> Compare original to Min-Max
 
-- Set up a Qualtrics Survey. 
+```{r include=FALSE}
+library(tidyr)
 
-- Administer survey to 2 fellow students
+fdi_min <- fdi[, c('iso2c', 'year', 'foreign_direct_investment', 'fdi_min_max')]
 
-- Download data and import it into R.
+fdi_min <- fdi_min %>% gather(version, value, 3:4)
+```
 
-- Create contingency tables and grouped bar charts.
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
 
+ggplot(fdi_min, aes(value, group = version)) +
+    geom_histogram() +
+    facet_wrap(~ version, scale = 'free') +
+    xlab('') + ylab('Count\n') +
+    theme_bw()
+```
 
-## <i class="fa fa-arrow-up"></i> Plotting (grouped bar chart)--ggplot2
+## <i class="fa fa-balance-scale"></i> Z-Score rescale
+
+The equation for Z-Scores is:
+
+$$
+I_{u,t} = \frac{x_{u,t} - \mu_{\mathrm{X}}}{\sigma_{\mathrm{X}}}
+$$
+
+So, the R function would be:
 
 ```{r}
-library(ggplot2); ggplot(survey, aes(Exer, fill = Smoke)) +
-    geom_bar(position = 'dodge') + 
-    xlab('Excercise Frequency') + theme_bw()
+z_score <- function(x) {
+                (x - mean(x, na.rm = T)) /
+                sd(x, na.rm = T)
+}
 ```
+
+## <i class="fa fa-balance-scale"></i> Z-Score rescale
+
+Now use the function:
+
+```{r}
+fdi$fdi_z_score <- z_score(fdi$foreign_direct_investment)
+```
+
+## <i class="fa fa-balance-scale"></i> Compare original to Z-Score
+
+```{r include=FALSE}
+fdi_z <- fdi[, c('iso2c', 'year', 'foreign_direct_investment', 'fdi_z_score')]
+
+fdi_z <- fdi_z %>% gather(version, value, 3:4)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(fdi_z, aes(value, group = version)) +
+    geom_histogram() +
+    facet_wrap(~ version, scale = 'free') +
+    xlab('') + ylab('Count\n') +
+    theme_bw()
+```
+
+## <i class="fa fa-undo"></i> Reverse a variable's direction
+
+The equation to reverse a variable's direction:
+
+$$
+I_{u,t} = \mathrm{max}(\mathrm{X}) - x_{u,t}
+$$
+
+So the function would be:
+
+```{r}
+reverse_direction <- function(x) max(x, na.rm = T) - x
+```
+
+Now use the function:
+
+```{r}
+fdi$fdi_z_reverse <- reverse_direction(fdi$fdi_z_score)
+```
+
+## <i class="fa fa-undo"></i> Reverse
+
+```{r include=FALSE}
+fdi_rev <- fdi[, c('iso2c', 'year', 'fdi_z_score', 'fdi_z_reverse')]
+
+fdi_rev <- fdi_rev %>% gather(version, value, 3:4)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(fdi_rev, aes(value, group = version)) +
+    geom_histogram() +
+    facet_wrap(~ version, scale = 'free') +
+    xlab('') + ylab('Count\n') +
+    theme_bw()
+```
+
+## <i class="fa fa-plus"></i> Weight/Aggregate
+
+Once we have our rescaled components, we then decide on how to weight and aggregate our indicators.
+
+For this class you will use 'expert-judgement'.
+
+## <i class="fa fa-plus"></i> Weight/Aggregate example
+
+```{r include=FALSE}
+regions <- unique(wdi$iso2c[grep('[0-9]', wdi$iso2c)])
+regions <- c(regions, wdi$iso2c[grep('^[XZ]', wdi$iso2c)])
+regions <- c(regions, 'EU', 'OE')
+
+# Keep rows with iso2c codes that do not begin with a number
+wdi <- subset(wdi, !(iso2c %in% regions))
+
+# Rename indicators
+wdi <- wdi %>% rename(methane_emissions = EN.ATM.METH.KT.CE) %>%
+               rename(electricity_use = EG.USE.ELEC.KH.PC) %>%
+               rename(co2_emissions = EN.ATM.CO2E.PC) %>% 
+               rename(population_growth = SP.POP.GROW) %>%
+               rename(alternative_energy = EG.USE.COMM.CL.ZS)
+
+# Drop incomplete cases
+indicators_environ <- c('electricity_use', 'co2_emissions', 
+                         'population_growth', 'alternative_energy')
+wdi_sub <- DropNA(wdi, indicators_environ)
+
+# Z-Score rescale
+for (i in indicators_environ) {
+    wdi_sub[, i] <- z_score(wdi_sub[, i])
+}
+
+# Reverse the alternative energy use scale
+wdi_sub$alternative_energy <- reverse_direction(wdi_sub$alternative_energy)
+```
+
+Imagine we have four variables that we want to combine into our environmental unsustainability index: `electricity_use`, `co2_emissions`, `population_growth`, and `alternative_energy`. 
+
+We have use z-scores to rescale them and reversed the direction of `alternative_energy`. The results are in a data frame called `wdi_sub`. 
+
+We think that `co2_emissions` is particularly important so we give it a weighting of 0.3, the others have a weighting of 0.1:
+
+```{r}
+wdi_sub$unsustainability <- wdi_sub$co2_emissions * 0.3 + 
+                                  wdi_sub$electricity_use * 0.1 +
+                                  wdi_sub$population_growth * 0.1 +
+                                  wdi_sub$alternative_energy * 0.1
+```
+
+## Component indicator results
+
+```{r}
+hist(wdi_sub$unsustainability, main = '', 
+     xlab = 'Raw Unsustainability Index')
+```
+
+## Rescale the index
+
+We could of course rescale the index so that it is between 0 and 100.
+
+```{r}
+wdi_sub$unsustainability <- min_max(wdi_sub$unsustainability) * 100
+```
+
+## Rescaled index
+
+```{r}
+hist(wdi_sub$unsustainability, main = '', 
+     xlab = 'Rescaled Unsustainability Index')
+```
+
+## <i class="fa fa-map-o"></i> Map the index
+
+You could also map the results (good sanity check):
+
+```{r, message=FALSE}
+# Subset data for only 2011
+wdi_2011 <- subset(wdi_sub, year == 2011)
+
+# Use the googleVis package to create the map
+library(googleVis)
+
+map <- gvisGeoChart(wdi_2011, locationvar = "country", 
+                 colorvar = "unsustainability")
+```
+
+## <i class="fa fa-map-o"></i> Map the index
+
+```{r eval=FALSE}
+plot(map)
+```
+
+![index-map](img/unsustainable_map.png)
