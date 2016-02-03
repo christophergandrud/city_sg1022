@@ -498,7 +498,7 @@ It is important to **try and compare** multiple weighting schemes to examine how
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Seminar: Make an Index
 
-Using World Bank Development Indicators create an Educational Achievement Index.
+With a partner, using World Bank Development Indicators create an Educational Achievement Index:
 
 - Select and download at least 4 indicators
 
