@@ -1,5 +1,5 @@
 ---
-title: 'SG1022 Seminar 2: Using survey data'
+title: 'SG1022 Seminar 3: Using survey data'
 author: "Christopher Gandrud"
 date: '2016'
 output:
@@ -10,6 +10,8 @@ output:
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
 
+- Getting (local) data into R
+
 - Working with factors (categorical data)
 
 - Using R to analyse surveys (cross-tabs, $X^2$, grouped bar plots)
@@ -17,6 +19,162 @@ output:
 ## <i class="fa fa-check"></i> Pop Quiz
 
 -
+
+## <i class="fa fa-bolt"></i> Importance of understanding files/file structures
+
+- This topic may seem kind of . . . dry.
+
+- Why not just click and drag files with the GUI (Graphical User Interface)?
+
+## <i class="fa fa-bolt"></i> Importance of understanding files/file structures
+
+- **Reproducibility**: other researchers only have your files. If they are **well
+    organised** and the **links** between the files are **explicitly stated**
+    then they can better understand what you did.
+
+    + Clearest way of explicitly stating links is **dynamically** using file
+    paths in your source code.
+
+- **You**: well organised files will be easier for you to find/understand/use
+    in the future.
+
+
+## <i class="fa fa-folder-open-o"></i> File paths
+
+- Files are organised **hierarchically** into (upside down) trees.
+
+```{r eval=FALSE}
+Root
+|_
+    Parent
+    |_
+        Child1
+        Child2
+```
+
+## <i class="fa fa-folder-open-o"></i> Root
+
+**Root** directories are the **first level of a disk**.
+
+They are the root out of which the file tree grows.
+
+**Naming Conventions**:
+
+**Linux/Mac**: `/`
+
+- e.g. `/git_repos` means that the `git_repos` directory is a child
+of the root directory.
+
+**Windows**: the disk is partitioned, e.g. the `C` partition is denoted `C:\`.
+
+- `C:\git_repos` indicates that the `git_repos` directory is a child
+of the `C` partition.
+
+## <i class="fa fa-folder-open-o"></i> Sub (child) directories
+
+Sub (child) directories are denoted with a `/` in Linux/Mac and `\` in Windows, e.g.:
+
+```{r engine='sh', eval=FALSE}
+# Linux/Mac
+/git_repos/Project1
+
+# Windows
+C:\git_repos\Project1
+```
+
+<i class="fa fa-exclamation"></i> R tip:
+
+- In R for Windows you either use two backslashes `\\` (`\` is the R [escape
+character](http://en.wikipedia.org/wiki/Escape_character))
+
+- Or `/` in **relative paths** in R for Windows, it will know
+what you mean.
+
+## <i class="fa fa-folder-open-o"></i> Working directories
+
+A **working directory** is the directory where the program looks for files/other
+directories.
+
+<i class="fa fa-exclamation"></i> **Always remember the working directory.**
+
+- Otherwise you may open/save files that you do not want to open/save.
+
+## <i class="fa fa-folder-open-o"></i> Working directories
+
+**In R:**
+
+```{r}
+# Find working directory
+getwd()
+
+# List all files in the working directory
+list.files()
+```
+
+```{r, eval=FALSE}
+# Set root as working directory
+setwd('/')
+```
+
+## <i class="fa fa-folder-open-o"></i> Relative vs. Absolute file paths
+
+Use **relative file paths** when possible.
+
+- **Absolute file path**: the entire path on a particular system,
+    + E.g. `/git_repos/Project1/data.csv`
+
+- **Relative file path**: the path relative to the working directory.
+
+    + E.g. if `/git_repos` is the working directory then the relative path for
+    `data.csv` is `Project1/data.csv`.
+
+Why?
+
+- Your scripts will run easily on **other computers**. **Enhances reproducibility**.
+Easier for your collaborators. Easier for you when you use another computer.
+
+## <i class="fa fa-folder-open-o"></i> File & directory name conventions
+
+<i class="fa fa-exclamation-triangle"></i> **Don't use spaces** in your file names.
+
+They can create problems for programs that treat spaces as an indication that the
+path has ended.
+
+Alternatives:
+
+- `CamelCase` (ex. `DataAnalysis.R`)
+
+- `file_underscore` (ex. `data_analysis.R`)
+
+## Loading data into R
+
+R can load data from many different file formats (e.g. .sav (SPSS), .xlsx (Excel), .dta (Stata), .csv).
+
+The [rio](https://github.com/leeper/rio) (R input/output) package makes it very easy to import many different types of data.
+
+It has two key functions `import` and `export`.
+
+## Rio `import` for loading data into R
+
+```{r, warning=FALSE}
+library(rio)
+setwd('/git_repositories/city_sg1022/seminars/week_3/data/')
+
+# Load ESS 5 (UK) only data from SPSS format
+ess5_uk <- import('ESS5_UKonly.sav')
+
+head(ess5_uk[1:3, 1:6])
+```
+
+# Note: Always look at the data you imported to see if it's what you think you imported/see what needs cleaning.
+
+## Rio `export` for saving data
+
+We can save the `ess5_uk` data into another format. For example, .csv "Comma Separated Values". Just add the csv file extension to the file name and `rio` does the rest.
+
+```{r, eval=FALSE}
+export(ess5_uk, 'ess5_uk.csv')
+```
 
 ## Review: factors (categorical data)
 

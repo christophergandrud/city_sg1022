@@ -12,8 +12,6 @@ output:
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
 
-- Getting (local) data into R
-
 - Getting data into R from the World Bank Development Indicators with `WDI`
 
 - Dealing with missing data
@@ -33,162 +31,6 @@ output:
 - What are **objects** and what are **functions**? Give examples.
 
 - What is the **assignment operator**? What is **component selection**?
-
-## <i class="fa fa-bolt"></i> Importance of understanding files/file structures
-
-- This topic may seem kind of . . . dry.
-
-- Why not just click and drag files with the GUI (Graphical User Interface)?
-
-## <i class="fa fa-bolt"></i> Importance of understanding files/file structures
-
-- **Reproducibility**: other researchers only have your files. If they are **well
-    organised** and the **links** between the files are **explicitly stated**
-    then they can better understand what you did.
-
-    + Clearest way of explicitly stating links is **dynamically** using file
-    paths in your source code.
-
-- **You**: well organised files will be easier for you to find/understand/use
-    in the future.
-
-
-## <i class="fa fa-folder-open-o"></i> File paths
-
-- Files are organised **hierarchically** into (upside down) trees.
-
-```{r eval=FALSE}
-Root
-|_
-    Parent
-    |_
-        Child1
-        Child2
-```
-
-## <i class="fa fa-folder-open-o"></i> Root
-
-**Root** directories are the **first level of a disk**.
-
-They are the root out of which the file tree grows.
-
-**Naming Conventions**:
-
-**Linux/Mac**: `/`
-
-- e.g. `/git_repos` means that the `git_repos` directory is a child
-of the root directory.
-
-**Windows**: the disk is partitioned, e.g. the `C` partition is denoted `C:\`.
-
-- `C:\git_repos` indicates that the `git_repos` directory is a child
-of the `C` partition.
-
-## <i class="fa fa-folder-open-o"></i> Sub (child) directories
-
-Sub (child) directories are denoted with a `/` in Linux/Mac and `\` in Windows, e.g.:
-
-```{r engine='sh', eval=FALSE}
-# Linux/Mac
-/git_repos/Project1
-
-# Windows
-C:\git_repos\Project1
-```
-
-<i class="fa fa-exclamation"></i> R tip:
-
-- In R for Windows you either use two backslashes `\\` (`\` is the R [escape
-character](http://en.wikipedia.org/wiki/Escape_character))
-
-- Or `/` in **relative paths** in R for Windows, it will know
-what you mean.
-
-## <i class="fa fa-folder-open-o"></i> Working directories
-
-A **working directory** is the directory where the program looks for files/other
-directories.
-
-<i class="fa fa-exclamation"></i> **Always remember the working directory.**
-
-- Otherwise you may open/save files that you do not want to open/save.
-
-## <i class="fa fa-folder-open-o"></i> Working directories
-
-**In R:**
-
-```{r}
-# Find working directory
-getwd()
-
-# List all files in the working directory
-list.files()
-```
-
-```{r, eval=FALSE}
-# Set root as working directory
-setwd('/')
-```
-
-## <i class="fa fa-folder-open-o"></i> Relative vs. Absolute file paths
-
-Use **relative file paths** when possible.
-
-- **Absolute file path**: the entire path on a particular system,
-    + E.g. `/git_repos/Project1/data.csv`
-
-- **Relative file path**: the path relative to the working directory.
-
-    + E.g. if `/git_repos` is the working directory then the relative path for
-    `data.csv` is `Project1/data.csv`.
-
-Why?
-
-- Your scripts will run easily on **other computers**. **Enhances reproducibility**.
-Easier for your collaborators. Easier for you when you use another computer.
-
-## <i class="fa fa-folder-open-o"></i> File & directory name conventions
-
-<i class="fa fa-exclamation-triangle"></i> **Don't use spaces** in your file names.
-
-They can create problems for programs that treat spaces as an indication that the
-path has ended.
-
-Alternatives:
-
-- `CamelCase` (ex. `DataAnalysis.R`)
-
-- `file_underscore` (ex. `data_analysis.R`)
-
-## Loading data into R
-
-R can load data from many different file formats (e.g. .sav (SPSS), .xlsx (Excel), .dta (Stata), .csv).
-
-The [rio](https://github.com/leeper/rio) (R input/output) package makes it very easy to import many different types of data.
-
-It has two key functions `import` and `export`.
-
-## Rio `import` for loading data into R
-
-```{r, warning=FALSE}
-library(rio)
-setwd('/git_repositories/city_sg1022/seminars/week_2/data/')
-
-# Load DPI 2012 data in Stata format
-dpi <- import('dpi2012.dta')
-
-head(dpi[1:3, 1:6])
-```
-
-# Note: Always look at the data you imported to see if it's what you think you imported/see what needs cleaning.
-
-## Rio `export` for saving data
-
-We can save the `dpi` data into another format. For example, .csv "Comma Separated Values". Just add the csv file extension to the file name and rio does the rest.
-
-```{r, eval=FALSE}
-export(dpi, 'dpi2012.csv')
-```
 
 ## World Development Indicators
 
@@ -286,6 +128,24 @@ wdi <- WDI(indicator = indicators, start = 1990, end = 2014)
 names(wdi)
 ```
 
+## Cleaning code for reference
+
+```{r}
+regions <- unique(wdi$iso2c[grep('[0-9]', wdi$iso2c)])
+regions <- c(regions, wdi$iso2c[grep('^[XZ]', wdi$iso2c)])
+regions <- c(regions, 'EU', 'OE')
+
+# Keep rows with iso2c codes that do not begin with a number
+wdi <- subset(wdi, !(iso2c %in% regions))
+
+# Rename indicators
+wdi <- wdi %>% rename(methane_emissions = EN.ATM.METH.KT.CE) %>%
+               rename(electricity_use = EG.USE.ELEC.KH.PC) %>%
+               rename(co2_emissions = EN.ATM.CO2E.PC) %>%
+               rename(population_growth = SP.POP.GROW) %>%
+               rename(alternative_energy = EG.USE.COMM.CL.ZS)
+```
+
 ## Missing Data
 
 Remember that in R, missing data is usually coded `NA`. Note that sometimes data set creators also use other codes, such as `-999`.
@@ -329,8 +189,11 @@ You can drob missing data on **multiple variables** with the `DropNA` function f
 ```{r}
 library(DataCombine)
 
-# Remember we created the vector of indicator names earlier
-wdi <- DropNA(wdi, Var = indicators)
+# Indicators to create complete cases on
+indicators_environ <- c('electricity_use', 'co2_emissions',
+                         'population_growth', 'alternative_energy')
+
+wdi <- DropNA(wdi, Var = indicators_environ)
 ```
 
 Use this to get **complete cases** for your composite indicator.
@@ -348,6 +211,41 @@ fdi$foreign_direct_investment[
 ```
 
 **Note:** these decisions need to be **fully justified**.
+
+## <i class="fa fa-exchange"></i> Correlation
+
+One way to understand the structure of your components is to examine how they correlate with each other.
+
+Use the `cor` function to find how two variables correlate with each other:
+
+```{r}
+cor(wdi$electricity_use, wdi$co2_emissions, use = 'complete.obs')
+```
+
+## Bi-variate plots
+
+Another view with a bi-variate `plot`.
+
+```{r}
+plot(wdi$electricity_use, wdi$co2_emissions)
+```
+
+## Correlation matrix
+
+You can create a correlation matrix to view multiple bi-variate correlations at once:
+
+```{r}
+# Remember we created a vector of indicator names earlier
+environ_cor <- cor(wdi[, indicators_environ], use = 'complete.obs')
+
+environ_cor
+```
+
+## Easier view
+
+```{r}
+corrplot::corrplot(environ_cor, method = 'number')
+```
 
 ## <i class="fa fa-balance-scale"></i> Rescaling
 
@@ -516,23 +414,8 @@ For this class you will use 'expert-judgement'.
 ## <i class="fa fa-plus"></i> Weight/Aggregate example
 
 ```{r include=FALSE}
-regions <- unique(wdi$iso2c[grep('[0-9]', wdi$iso2c)])
-regions <- c(regions, wdi$iso2c[grep('^[XZ]', wdi$iso2c)])
-regions <- c(regions, 'EU', 'OE')
-
-# Keep rows with iso2c codes that do not begin with a number
-wdi <- subset(wdi, !(iso2c %in% regions))
-
-# Rename indicators
-wdi <- wdi %>% rename(methane_emissions = EN.ATM.METH.KT.CE) %>%
-               rename(electricity_use = EG.USE.ELEC.KH.PC) %>%
-               rename(co2_emissions = EN.ATM.CO2E.PC) %>% 
-               rename(population_growth = SP.POP.GROW) %>%
-               rename(alternative_energy = EG.USE.COMM.CL.ZS)
-
 # Drop incomplete cases
-indicators_environ <- c('electricity_use', 'co2_emissions', 
-                         'population_growth', 'alternative_energy')
+# Rember we created a vector of indicator names earlier
 wdi_sub <- DropNA(wdi, indicators_environ)
 
 # Z-Score rescale
@@ -544,14 +427,14 @@ for (i in indicators_environ) {
 wdi_sub$alternative_energy <- reverse_direction(wdi_sub$alternative_energy)
 ```
 
-Imagine we have four variables that we want to combine into our environmental unsustainability index: `electricity_use`, `co2_emissions`, `population_growth`, and `alternative_energy`. 
+Imagine we have four variables that we want to combine into our environmental unsustainability index: `electricity_use`, `co2_emissions`, `population_growth`, and `alternative_energy`.
 
-We have use z-scores to rescale them and reversed the direction of `alternative_energy`. The results are in a data frame called `wdi_sub`. 
+We have use z-scores to rescale them and reversed the direction of `alternative_energy`. The results are in a data frame called `wdi_sub`.
 
 We think that `co2_emissions` is particularly important so we give it a weighting of 0.3, the others have a weighting of 0.1:
 
 ```{r}
-wdi_sub$unsustainability <- wdi_sub$co2_emissions * 0.3 + 
+wdi_sub$unsustainability <- wdi_sub$co2_emissions * 0.3 +
                                   wdi_sub$electricity_use * 0.1 +
                                   wdi_sub$population_growth * 0.1 +
                                   wdi_sub$alternative_energy * 0.1
@@ -560,7 +443,7 @@ wdi_sub$unsustainability <- wdi_sub$co2_emissions * 0.3 +
 ## Component indicator results
 
 ```{r}
-hist(wdi_sub$unsustainability, main = '', 
+hist(wdi_sub$unsustainability, main = '',
      xlab = 'Raw Unsustainability Index')
 ```
 
@@ -575,7 +458,7 @@ wdi_sub$unsustainability <- min_max(wdi_sub$unsustainability) * 100
 ## Rescaled index
 
 ```{r}
-hist(wdi_sub$unsustainability, main = '', 
+hist(wdi_sub$unsustainability, main = '',
      xlab = 'Rescaled Unsustainability Index')
 ```
 
@@ -590,7 +473,7 @@ wdi_2011 <- subset(wdi_sub, year == 2011)
 # Use the googleVis package to create the map
 library(googleVis)
 
-map <- gvisGeoChart(wdi_2011, locationvar = "country", 
+map <- gvisGeoChart(wdi_2011, locationvar = "country",
                  colorvar = "unsustainability")
 ```
 
@@ -601,3 +484,21 @@ plot(map)
 ```
 
 ![index-map](img/unsustainable_map.png)
+
+
+
+## <i class="fa fa-arrow-circle-o-up"></i> Seminar: Make an Index
+
+Using World Bank Development Indicators create an Educational Achievement Index.
+
+- Select and download at least 4 indicators
+
+- Examine and deal with missing values
+
+- Explore the variables with a correlation matrix
+
+- Put the variables on the same scale and reverse variable directions as need be.
+
+- Weight and aggregate the variables into an composite index.
+
+- Display the results (histogram and map)
