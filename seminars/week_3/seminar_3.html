@@ -215,7 +215,7 @@ getwd()</pre>
 <pre class = 'prettyprint lang-r'># List all files in the working directory
 list.files()</pre>
 
-<pre >## [1] &quot;data&quot;          &quot;seminar_3.Rmd&quot;</pre>
+<pre >## [1] &quot;data&quot;           &quot;seminar_3.html&quot; &quot;seminar_3.Rmd&quot;</pre>
 
 <pre class = 'prettyprint lang-r'># Set root as working directory
 setwd(&#39;/&#39;)</pre>
@@ -318,13 +318,13 @@ head(ess5_uk[1:3, 1:6])</pre>
 
 <pre class = 'prettyprint lang-r'>head(ex_income)</pre>
 
-<pre >##              persons income
-## 1     Hurtado, Ivory      2
-## 2      Carter, Jason      2
-## 3    Echohawk, Jerod      2
-## 4        Her, T&#39;Ll-A      3
-## 5 Young III, Deirdra      3
-## 6  Granillo, Madisen      3</pre>
+<pre >##          persons income
+## 1 Vigil, Marissa      1
+## 2  White, Joshua      3
+## 3  Singh, Edison      3
+## 4     Lor, Najee      2
+## 5 Brown, Matthew      2
+## 6  Hwang, Julius      2</pre>
 
 </article></slide><slide class=''><hgroup><h2>Factor labels</h2></hgroup><article  id="factor-labels">
 
@@ -337,7 +337,7 @@ ex_income$income &lt;- factor(ex_income$income, labels = income_labels)
 summary(ex_income$income)</pre>
 
 <pre >##    Low income Medium income   High income 
-##           334           329           337</pre>
+##           326           342           332</pre>
 
 </article></slide><slide class=''><hgroup><h2>Converting from character strings to factors (1)</h2></hgroup><article  id="converting-from-character-strings-to-factors-1">
 
@@ -356,106 +356,74 @@ summary(ex_income$income)</pre>
 
 summary(ex_income$persons)</pre>
 
-<pre >##         Abraham, Priyanka          Acierno, Madison 
-##                         1                         1 
-##               Acker, Tien          Adamic, Carolina 
-##                         1                         1 
-##                Adams, Nhi            Adams, Philong 
-##                         1                         1 
-##     Aggrey Ofori, Vanessa    Aguilar Mares, Desiree 
-##                         1                         1 
-##            Aguirre, Emily           Ahlenius, Dylan 
-##                         1                         1 
-##               Ahmed, Omar               Aldaz, Mary 
-##                         1                         1 
-##        Alexander, Shabnam            Alfaro, Amanda 
-##                         1                         1 
-##             Alfaro, Nancy          Alkarim, Anthony 
-##                         1                         1 
-##             Allen, Brooke           Allen, Jennifer 
-##                         1                         1 
-##            Allen, Randall             Alston, Angel 
-##                         1                         1 
-## Alvarado Menchaca, Bristi            Amadou, Angela 
-##                         1                         1 
-##          Anderson, Andrew           Anderson, Ayala 
-##                         1                         1 
-##         Anderson, Cecelia         Anderson, Patrick 
-##                         1                         1 
-##             Annamalai, Cl             Apodaca, Alex 
-##                         1                         1 
-##       Appenzeller, Sophia             Archer, Jesse 
-##                         1                         1 
-##            Arellano, Carl           Artis, Cristian 
-##                         1                         1 
-##               Asher, Ivan  Atencio-Aguilar, Maurica 
-##                         1                         1 
-##         Atkins, Elizabeth            Austria, Danny 
-##                         1                         1 
-##           Auyeung, Carlos            Avalos, Rozell 
-##                         1                         1 
-##             Avila, Taylor            Avilova, David 
-##                         1                         1 
-##             Awolaja, Ivan             Babb, Tiffany 
-##                         1                         1 
-##           Babcock, Walter             Baca, Brendon 
-##                         1                         1 
-##              Baer, Marcus              Bailey, Deja 
-##                         1                         1 
-##          Baker, Elizabeth           Bancroft, Nadir 
-##                         1                         1 
-##             Banh, Maurice            Banks, Killian 
-##                         1                         1 
-##   Banuelos-Fierro, Dezire     Baray Perez, Angelica 
-##                         1                         1 
-##            Barbee, Daniel            Barela, Ciante 
-##                         1                         1 
-##           Barker, Jessica           Barnes, Anthony 
-##                         1                         1 
-##          Barnes, Jeremiah         Barrette, Breanna 
-##                         1                         1 
-##       Batorgil, Francisco            Baucom, Alexus 
-##                         1                         1 
-##            Baylor, Alicia           Becker, Zachary 
-##                         1                         1 
-##          Beckley, Richard             Bedan, Dahlia 
-##                         1                         1 
-##           Beers, Katelynn             Beery, Brooke 
-##                         1                         1 
-##            Begay, Mun Sik              Begaye, Coby 
-##                         1                         1 
-##          Belva, Elizabeth          Bennett, Altemus 
-##                         1                         1 
-##              Bennett, Ana         Bensreiti, Kiduse 
-##                         1                         1 
-##         Bentley, Jonathan               Bhatt, Zane 
-##                         1                         1 
-##           Biglen, Jasmine         Bing-Turner, Mark 
-##                         1                         1 
-##         Binggeli, Charlie            Black, Breanna 
-##                         1                         1 
-##           Bolanos, Meshel           Bond, Catherine 
-##                         1                         1 
-##      Bonfil-Ramirez, Katy           Bonser, Tiffany 
-##                         1                         1 
-##           Bonsu, Savannah              Boon, Couric 
-##                         1                         1 
-##          Boulier, Reiyker              Bowser, Jake 
-##                         1                         1 
-##   Bravo-Herrera, Niqualia          Brickens, Prisha 
-##                         1                         1 
-##     Brickey, Xochitlmaria            Briseno, Dylan 
-##                         1                         1 
-##              Brody, Elias           Brooks, Michael 
-##                         1                         1 
-##        Broomfield, Angela            Brown, Hsi Hsi 
-##                         1                         1 
-##            Brown, Matthew             Brown, Tawfiq 
-##                         1                         1 
-##           Brutout, Bryant              Brutus, Esai 
-##                         1                         1 
-##              Bryne, Megan                   (Other) 
-##                         1                       901</pre>
+<pre >##               Dul, Malik       Abdullahi, Delilah       Abeyta, Alexandria 
+##                        2                        1                        1 
+##          Abeyta, Dandrew          Abeyta, Tijanay          Abraha, Shyloah 
+##                        1                        1                        1 
+##             Abram, Paige              Adams, Tuan         Aguilar, Dilkush 
+##                        1                        1                        1 
+##         Aguilar, Kadeeja          Aguilar, Monika          Aguilar, Sophia 
+##                        1                        1                        1 
+## Aguirre-Barrera, Kylesha           Aguirre, Kayla        Alexander, Ashley 
+##                        1                        1                        1 
+##         Alexander, Diego          Alkarim, Jarell               Allen, Ian 
+##                        1                        1                        1 
+##             Allen, Kaleb           Almarez, Danna     Altamirano, Fernando 
+##                        1                        1                        1 
+##    Alvarado Jaquez, Ruth        Alvarado, Melissa  Amgalanbayar, Rennosuke 
+##                        1                        1                        1 
+##        Anderson, Brandon         Anderson, Cherob          Anderson, Dlisa 
+##                        1                        1                        1 
+##         Anderson, Selena           Anthony, Mercy          Antwine, Kaylin 
+##                        1                        1                        1 
+##              Aochi, Luis         Apodaca, Kyerria           Arambula, Miah 
+##                        1                        1                        1 
+##           Aranda, Denise        Arapahoe, Russell        Archer, Kassandra 
+##                        1                        1                        1 
+##        Archuleta, Daesha      Archuleta, Nicholas              Arias, Hope 
+##                        1                        1                        1 
+##           Armijo Jr, Lee         Arreola, Racheal            Arroyo, Tyler 
+##                        1                        1                        1 
+##        Ashworth, Richard          Atencio, Alicia       Atufunwa, Mersadez 
+##                        1                        1                        1 
+##      Auyeung, Davondrick             Avery, Jacob                Aya, Djen 
+##                        1                        1                        1 
+##  Aybar Castillo, Raijaun           Ayotte, Rachel    Baca Pollares, Brehaa 
+##                        1                        1                        1 
+##            Baca, De&#39;Ajia             Badial, Ruth             Bagli, Perla 
+##                        1                        1                        1 
+##            Baig, Jez-Mas            Baldwin, Ryan         Balogh, Nicholas 
+##                        1                        1                        1 
+##         Bancroft, Andrew          Barber, Jessica     Bardossas, Alejandra 
+##                        1                        1                        1 
+##       Barksdale, Abhinav           Barrera, Tasha           Barry, Breanna 
+##                        1                        1                        1 
+##            Bass, Sheldon             Basu, Sammie       Bat-Itgel, Charles 
+##                        1                        1                        1 
+##        Batts, Kristopher           Beaman, Rachel               Bean, Alan 
+##                        1                        1                        1 
+##            Bean, Jeffrey             Beatty, Ross             Beg, Esteban 
+##                        1                        1                        1 
+##           Bemnet, Rachel       Benavides, Rhianna             Best, Hailey 
+##                        1                        1                        1 
+##          Bethel, Nikisha           Beyale, Daniel         Beyale, Lawrence 
+##                        1                        1                        1 
+##         Bhandary, Josiah            Bilger, Irene        Bingham, Samantha 
+##                        1                        1                        1 
+##          Bisgard, Briana          Bishop, Chasity             Bivins, Noah 
+##                        1                        1                        1 
+##           Black, Michael        Blackburn, Nathan        Blackwater, Randy 
+##                        1                        1                        1 
+##           Bland, Rebecca            Blythe, Aryan           Bolden, Taylor 
+##                        1                        1                        1 
+##           Bolton, Alfred             Bond, Fergus               Bond, Sean 
+##                        1                        1                        1 
+##         Bowerman, Robert        Bradford II, Xuan     Bravo-Herrera, Amari 
+##                        1                        1                        1 
+##       Brayshaw, Feng Wen          Brewer, Majynta          Briggs, Liliana 
+##                        1                        1                        1 
+##                  (Other) 
+##                      900</pre>
 
 </article></slide><slide class=''><hgroup><h2> Frequency table (categorical variables)</h2></hgroup><article  id="frequency-table-categorical-variables">
 

@@ -224,6 +224,8 @@ Use the `cor` function to find how two variables correlate with each other:
 cor(wdi$electricity_use, wdi$co2_emissions, use = 'complete.obs')
 ```
 
+This is the (linear) **correlation coefficient**.
+
 ## Bi-variate plots
 
 Another view with a bi-variate `plot`.
