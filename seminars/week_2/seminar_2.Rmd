@@ -207,9 +207,12 @@ Once you have analysed the reasons for your missing data, it **may** be reasonab
 For example, maybe it is reasonable to replace `NA` values with the variable `mean`:
 
 ```{r, eval=FALSE}
+# Find mean FDI
+mean_fdi <- mean(fdi$foreign_direct_investment, na.rm = TRUE)
+
+# Replace NAs with FDI mean
 fdi$foreign_direct_investment[
-                        is.na(fdi$foreign_direct_investment)] <-
-                    mean(fdi$foreign_direct_investment, na.rm = TRUE)
+                is.na(fdi$foreign_direct_investment)] <- mean_fdi
 ```
 
 **Note:** these decisions need to be **fully justified**.

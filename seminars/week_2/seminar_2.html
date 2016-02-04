@@ -321,9 +321,12 @@ wdi &lt;- DropNA(wdi, Var = indicators_environ)</pre>
 
 <p>For example, maybe it is reasonable to replace <code>NA</code> values with the variable <code>mean</code>:</p>
 
-<pre class = 'prettyprint lang-r'>fdi$foreign_direct_investment[
-                        is.na(fdi$foreign_direct_investment)] &lt;-
-                    mean(fdi$foreign_direct_investment, na.rm = TRUE)</pre>
+<pre class = 'prettyprint lang-r'># Find mean FDI
+mean_fdi &lt;- mean(fdi$foreign_direct_investment, na.rm = TRUE)
+
+# Replace NAs with FDI mean
+fdi$foreign_direct_investment[
+                is.na(fdi$foreign_direct_investment)] &lt;- mean_fdi</pre>
 
 <p><strong>Note:</strong> these decisions need to be <strong>fully justified</strong>.</p>
 

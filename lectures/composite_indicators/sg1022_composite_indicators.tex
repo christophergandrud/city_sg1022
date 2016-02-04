@@ -47,7 +47,7 @@
     \begin{itemize}
         \item What are composite indicators and who uses them?
 
-        \item Making Composite Indicators
+        \item Making composite indicators
 
         \item Pros and cons
 
@@ -234,7 +234,7 @@
 
         \item Address missing data
 
-        \item Multivariate analysis (note: we don't really much this in this course)
+        \item Multivariate analysis (note: we don't really do much this in this course)
 
         \item Normalisation
 
@@ -367,7 +367,7 @@
     \frametitle{Missing values}
 
     \begin{center}
-        To aggregate your components into a composite indicator you need a {\large{complete data set}}, with {\large{no missing values}}.
+        To aggregate your components into a composite indicator, you need a {\large{complete data set}}, with {\large{no missing values}}.
 
         \vspace{0.5cm}
 
@@ -552,7 +552,7 @@ Note: NA in R means missing value.
 \frame{
     \frametitle{Rough goal}
 
-    The overall goal is to theoretically understand how the variables are related to each other theoretically and empirically.
+    The overall goal is to understand how the variables are related to each other theoretically and empirically.
 
     \vspace{0.5cm}
 
@@ -562,7 +562,7 @@ Note: NA in R means missing value.
         \item not wanting very highly correlated variables, as these indicate duplication
 
         \begin{center}
-            and
+            \emph{and}
         \end{center}
 
         \item not wanting very lowly correlated variables, as this indicates they are related to different concepts.
@@ -581,11 +581,11 @@ Note: NA in R means missing value.
 
     \vspace{0.5cm}
 
-    For example, \emph{life expectancy at birth} is in years ranging from 0 to $>100$ and \emph{GNI per capita} is in US dollars starting from $>300$.
+    For example, \emph{life expectancy at birth} is in years ranging from 0 to $>100$ and \emph{GNI per capita} is in US dollars starting from $>300$ and go up to about 100,000.
 
     \vspace{0.5cm}
 
-    Obviously, adding these two variables together would {\large{\textbf{weight GNI more than life expectancy}}}.
+    Adding these two variables together would {\large{\textbf{weight GNI more than life expectancy}}}.
 }
 
 \frame{
@@ -625,7 +625,7 @@ Note: NA in R means missing value.
 
     \vspace{0.5cm}
 
-    Note: extreme values can distort the measure and can widen the range of closely spaced values.
+    Note: extreme values can distort the measure and can widen the range of closely spaced values. Could be used for ordinal data.
 }
 
 \frame{
@@ -842,7 +842,7 @@ Note: NA in R means missing value.
 
     \begin{itemize}
 
-        \item Error in our construct (i.e. including or omitting important variables)
+        \item Error in our construct (e.g. omitting important variables)
 
         \item Measurement error in our raw data $x_{c,t}$
 
