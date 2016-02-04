@@ -4,7 +4,7 @@ author: "Christopher Gandrud"
 date: '2016'
 output:
   ioslides_presentation:
-    css: https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css
+    <!--css: https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css -->
     logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
   beamer_presentation: default
   slidy_presentation: default
@@ -499,8 +499,8 @@ When you create an index for units (e.g. countries) over time (e.g. years) it is
 
 ```{r message=FALSE}
 # Select specific countries
-keep <- c('China', 'Saudi Arabia', 'France', 'United States', 'South Africa', 
-          'United Kingdom')
+keep <- c('China', 'Saudi Arabia', 'France', 'United States',
+          'South Africa', 'United Kingdom')
 wdi_countries <- subset(wdi_sub, country %in% keep)
 
 # Plot 
