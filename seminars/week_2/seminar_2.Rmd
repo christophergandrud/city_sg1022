@@ -493,6 +493,33 @@ plot(map)
 
 ![index-map](img/unsustainable_map.png)
 
+## <i class="fa fa-line-chart"></i> Index over time
+
+When you create an index for units (e.g. countries) over time (e.g. years) it is useful to also plot these changes. 
+
+```{r message=FALSE}
+# Select specific countries
+keep <- c('China', 'Saudi Arabia', 'France', 'United States', 'South Africa', 
+          'United Kingdom')
+wdi_countries <- subset(wdi_sub, country %in% keep)
+
+# Plot 
+library(ggplot2)
+index_plot <- ggplot(wdi_countries, aes(x = year, 
+                                        y = unsustainability, 
+                                        colour = country)) +
+    geom_line() + 
+    xlab('') + ylab('Environmental Unsustainability Index\n') +
+    theme_bw()
+```
+
+## <i class="fa fa-line-chart"></i> Index over time
+
+```{r}
+index_plot
+```
+
+
 ## Experiment 
 
 It is important to **try and compare** multiple weighting schemes to examine how sensitive the index is to each one.
