@@ -629,6 +629,13 @@ Note: NA in R means missing value.
 }
 
 \frame{
+    \frametitle{Min-Max example}
+    \begin{center}
+        \includegraphics[scale=0.2]{figures/min-max_example.png}
+    \end{center}
+}
+
+\frame{
     \frametitle{Z-Score Standardisation}
 
     {\large{Z-Scores}} create a common scale with a mean of 0 and a standard deviation of 1.
@@ -643,6 +650,13 @@ Note: NA in R means missing value.
 
     Note: extreme values can have a greater effect on the composite indicator.
 
+}
+
+\frame{
+    \frametitle{Z-Score example}
+    \begin{center}
+        \includegraphics[scale=0.2]{figures/z-score_example.png}
+    \end{center}
 }
 
 \frame{
@@ -690,6 +704,13 @@ Note: NA in R means missing value.
 
 }
 
+\frame{
+    \frametitle{Direction reverse example}
+    \begin{center}
+        \includegraphics[scale=0.2]{figures/reverse_example.png}
+    \end{center}
+}
+
 \section{Weighting and Aggregation}
 
 \frame{
@@ -724,7 +745,7 @@ Note: NA in R means missing value.
 \frame{
     \frametitle{Equal weighting}
 
-    If you simply {\large{\textbf{add all of the variables}}} together, you are implicitly assuming that they have an {\large{\textbf{equal weight}}} of {\large{\textbf{1}}}. E.g.:
+    If you simply {\large{\textbf{add all of the variables}}} together, you are implicitly assuming that they have an {\large{\textbf{equal weight}}} of {\large{\textbf{1}}} in the composite index ($CI_{u,t}$). E.g.:
 
     \begin{equation}
         CI_{u,t} = \sum I_{u,t}*1
@@ -750,14 +771,14 @@ Note: NA in R means missing value.
 \frame{
     \frametitle{Expert judgement weights and linear aggregation}
 
-    Imagine that you have four component variables $X_{1}$, $X_{2}$, $X_{3}$ and $X_{4}$.
+    Imagine that you have four component variables that we have normalised: $I_{1}$, $I_{2}$, $I_{3}$ and $I_{4}$.
 
     \vspace{0.5cm}
 
-    Based on your expert knowledge, you believe that $X_{1}$ is much more important than the other three combined. So you give it a weight of 0.7 and the others 0.1:
+    Based on your expert knowledge, you believe that $I_{1}$ is much more important than the other three combined. So you give it a weight of 0.7 and the others 0.1:
 
     \begin{equation}
-        CI_{u,t} = 0.7x_{1u,t} + 0.1x_{2u,t} + 0.1x_{3u,t} + 0.1x_{4u,t}
+        CI_{u,t} = 0.7I_{1u,t} + 0.1I_{2u,t} + 0.1I_{3u,t} + 0.1I_{4u,t}
     \end{equation}
 
 }
