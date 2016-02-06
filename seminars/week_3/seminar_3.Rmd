@@ -335,7 +335,7 @@ chisq.test(smoking)
 
 - Set up a Qualtrics Survey.
 
-- Administer survey to 2 fellow students
+- Administer survey to your fellow students
 
 - Download data and import it into R.
 

@@ -3,11 +3,8 @@ title: 'SG1022 Seminar 2: Composite Indicators'
 author: "Christopher Gandrud"
 date: '2016'
 output:
-  ioslides_presentation:
-    <!--css: https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css -->
-    logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
-  beamer_presentation: default
-  slidy_presentation: default
+  pdf_document: default
+  ioslides_presentation: default
 ---
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
@@ -38,28 +35,72 @@ You can also load data stored **remotely** (on another computer) into R. There a
 
 Today we will download data from the World Bank's [World Development Indicators](http://data.worldbank.org/indicator) using the [WDI](https://github.com/vincentarelbundock/WDI) package.
 
+## Install packages.
+
+Remember that to install a package use the `install.packages` function. **You only need to do this once.**
+
+Today we will use six new packages that you need to install:
+
+```{r eval=FALSE}
+# Create a vector of the packages to install
+packages <- c('WDI', 'dplyr', 'DataCombine'
+             'corrplot', 'googleVis', 'ggplot2')
+
+# Install packages
+install.packages(packages)
+```
+
+## Loading packages
+
+**Each time you start R** and want to  use functions from a package, you need to load the package with the `library` function. So, for today use:
+
+```{r, message=FALSE}
+library(WDI)
+library(dplyr)
+library(DataCombine)
+library(corrplot)
+library(googleVis)
+library(ggplot2)
+```
+
+Remember to **include this code **at the top** of your source code file to ensure that it runs correctly.
+
 ## Find WDI Indicator ID
 
--  **Go** the the World Bank's website: <http://data.worldbank.org/indicator>.
+- **Go** the the World Bank's website: <http://data.worldbank.org/indicator>.
 
 - **Click** on the indicator you are interested in.
 
-- **Copy** the indicator ID. Example for *Foreign Direct Investment*:
+- **Copy** the indicator ID. Example for *Methane Emissions*:
 
 ![indicator_id](img/wdi_indicator_id.png)
 
-## Download WDI
+## Download WDI (1 indicator)
 
-Now use the `WDI` function to download the indicator:
+Now use the `WDI` function from the WDI package to download the indicator:
 
 ```{r message=FALSE, cache=TRUE}
-# Load WDI package
-library(WDI)
+# Download data. Place in new object called methane emissions
+methane <- WDI(indicator = 'EN.ATM.METH.KT.CE', start = 1990,
+           end = 2014)
 
-# Download data. Place in new object called fdi
-fdi <- WDI(indicator = 'BX.KLT.DINV.CD.WD', start = 1990, end = 2014)
+head(methane)
+```
 
-head(fdi)
+## Download WDI (multiple indicators)
+
+We can download multiple indicators at once. To do this simply create a **vector of ID code strings**. 
+
+Let's download the following 5 indicators related to environmental sustainability:
+
+```{r, cache=TRUE}
+indicators <- c('EN.ATM.METH.KT.CE', 'EG.USE.ELEC.KH.PC',
+                'EN.ATM.CO2E.PC', 'SP.POP.GROW',
+                'EG.USE.COMM.CL.ZS')
+
+wdi <- WDI(indicator = indicators, start = 1990, end = 2014)
+
+names(wdi)
 ```
 
 ## Some cleaning
@@ -70,16 +111,28 @@ We probably want to do some **cleaning** of this data set:
 
 - **Remove** units that are not countries (e.g. 'Arab World').
 
-## Renaming variables
+## Renaming 1 variable
 
 To rename variables in a data frame use the `rename` function from the [dplyr](https://github.com/hadley/dplyr) package.
 
 ```{r, message=FALSE}
-library(dplyr)
+methane <- rename(methane, methane_emissions = EN.ATM.METH.KT.CE)
 
-fdi <- rename(fdi, foreign_direct_investment = BX.KLT.DINV.CD.WD)
+names(methane)
+```
 
-head(fdi)
+## Rename multiple variables
+
+You can use the pipe `%>%` function (in dplyr) to help you rename multiple variables at the same time. (The pipe function takes one object and passes it to the first argument of the next function.)
+
+```{r}
+wdi <- wdi %>% rename(methane_emissions = EN.ATM.METH.KT.CE) %>%
+               rename(electricity_use = EG.USE.ELEC.KH.PC) %>%
+               rename(co2_emissions = EN.ATM.CO2E.PC) %>%
+               rename(population_growth = SP.POP.GROW) %>%
+               rename(alternative_energy = EG.USE.COMM.CL.ZS)
+
+names(wdi)
 ```
 
 ## Removing non-countries (1)
@@ -97,15 +150,14 @@ All countries have an [ISO 2 Letter Country Code](https://en.wikipedia.org/wiki/
 ## Removing non-countries (3)
 
 ```{r}
-# Create vector of all iso2c codes for units we don't want
-regions <- unique(fdi$iso2c[grep('[0-9]', fdi$iso2c)])
-regions <- c(regions, fdi$iso2c[grep('^[XZ]', fdi$iso2c)])
+# Remove unwanted regions
+regions <- unique(wdi$iso2c[grep('[0-9]', wdi$iso2c)])
+regions <- c(regions, wdi$iso2c[grep('^[XZ]', wdi$iso2c)])
 regions <- c(regions, 'EU', 'OE')
 
-# Keep rows with iso2c codes that are not regions
-fdi <- subset(fdi, !(iso2c %in% regions))
+wdi <- subset(wdi, !(iso2c %in% regions))
 
-head(fdi)
+head(wdi)
 ```
 
 ## <i class="fa fa-arrow-up"></i> Advanced: Regex
@@ -114,40 +166,6 @@ If you're interested: we use [regular expressions](https://en.wikipedia.org/wiki
 
 Note: regular expressions are very powerful, but also can take awhile to learn.
 
-## Download multiple WDI indicators
-
-We can download multiple indicators at once. To do this simply create a **vector of ID code strings**:
-
-```{r, cache=TRUE}
-indicators <- c('EN.ATM.METH.KT.CE', 'EG.USE.ELEC.KH.PC',
-                         'EN.ATM.CO2E.PC', 'SP.POP.GROW',
-                         'EG.USE.COMM.CL.ZS')
-
-wdi <- WDI(indicator = indicators, start = 1990, end = 2014)
-
-names(wdi)
-```
-
-## Cleaning code for reference
-
-```{r}
-library(dplyr) # contains rename and %>% functions
-
-# Remove unwanted regions
-regions <- unique(wdi$iso2c[grep('[0-9]', wdi$iso2c)])
-regions <- c(regions, wdi$iso2c[grep('^[XZ]', wdi$iso2c)])
-regions <- c(regions, 'EU', 'OE')
-
-wdi <- subset(wdi, !(iso2c %in% regions))
-
-# Rename indicators
-wdi <- wdi %>% rename(methane_emissions = EN.ATM.METH.KT.CE) %>%
-               rename(electricity_use = EG.USE.ELEC.KH.PC) %>%
-               rename(co2_emissions = EN.ATM.CO2E.PC) %>%
-               rename(population_growth = SP.POP.GROW) %>%
-               rename(alternative_energy = EG.USE.COMM.CL.ZS)
-```
-
 ## Missing Data
 
 Remember that in R, missing data is usually coded `NA`. Note that sometimes data set creators also use other codes, such as `-999`.
@@ -155,7 +173,7 @@ Remember that in R, missing data is usually coded `NA`. Note that sometimes data
 A good first step for exploring missing data is to use the `summary` function, which gives you a count of the number of NA's. It will also help you identify if there are any `-999` codes, i.e. likely by showing unintuitive `min` and `max` values.
 
 ```{r}
-summary(fdi$foreign_direct_investment)
+summary(wdi$electricity_use)
 ```
 
 ## Look at the data
@@ -168,29 +186,26 @@ Always take a look at your data to get a sense of the distribution of missing va
 
 Special codes like `-999` often indicate specific reasons for missing data. You should take the time to **understand the substantive meaning** of these codes.
 
-Ultimately, you may want to convert these into `NA` for analysis.
-
-For example, imagine we have a data frame called `survey` and we want to recode all `-999` values of some variable called `trust` as `NA`
+Ultimately, you may want to convert these into `NA` for analysis. For example:
 
 ```{r eval=FALSE}
-data$trust[data$trust == -999] <- NA
+# NOTE: in this example nothing will change
+# because there are no -999 values
+wdi$electricity_use[wdi$electricity_use == -999] <- NA
 ```
-
-## Dropping observations with missing data (1)
+## Dropping observations with missing data (1 indicator)
 
 You can drop observations with missing values on **one** variable with `subset`:
 
 ```{r, eval=FALSE}
-fdi <- subset(fdi, is.na(foreign_direct_investment))
+wdi <- subset(wdi, !is.na(electricity_use))
 ```
 
-## Dropping observations with missing data (2)
+## Dropping observations with missing data (multiple indicators)
 
-You can drob missing data on **multiple variables** with the `DropNA` function from the [DataCombine](https://github.com/christophergandrud/DataCombine) package.
+You can drop missing data on **multiple variables** with the `DropNA` function from the [DataCombine](https://github.com/christophergandrud/DataCombine) package.
 
 ```{r}
-library(DataCombine)
-
 # Indicators to create complete cases on
 indicators_environ <- c('electricity_use', 'co2_emissions',
                          'population_growth', 'alternative_energy')
@@ -208,11 +223,13 @@ For example, maybe it is reasonable to replace `NA` values with the variable `me
 
 ```{r, eval=FALSE}
 # Find mean FDI
-mean_fdi <- mean(fdi$foreign_direct_investment, na.rm = TRUE)
+mean_methane <- mean(methane$methane_emissions,
+                    na.rm = TRUE)
 
 # Replace NAs with FDI mean
-fdi$foreign_direct_investment[
-                is.na(fdi$foreign_direct_investment)] <- mean_fdi
+# NOTE: nothing will change because we already dropped the NAs
+methane$methane_emissions[
+            is.na(methane$methane_emissions)] <- mean_methane
 ```
 
 **Note:** these decisions need to be **fully justified**.
@@ -273,7 +290,7 @@ fun_mean <- function(x){
 }
 
 ## Find the mean
-fun_mean(x = swiss$Examination)
+fun_mean(x = wdi$electricity_use)
 ```
 
 ## <i class="fa fa-arrow-up"></i> Why create functions?
@@ -311,28 +328,13 @@ min_max <- function(x) {
 Now use the function:
 
 ```{r}
-fdi$fdi_min_max <- min_max(fdi$foreign_direct_investment)
-
+wdi$altern_min_max <- min_max(wdi$alternative_energy)
 ```
 
-## <i class="fa fa-balance-scale"></i> Compare original to Min-Max
+## <i class="fa fa-balance-scale"></i> Examine Min-Max distribution
 
-```{r include=FALSE}
-library(tidyr)
-
-fdi_min <- fdi[, c('iso2c', 'year', 'foreign_direct_investment', 'fdi_min_max')]
-
-fdi_min <- fdi_min %>% gather(version, value, 3:4)
-```
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-library(ggplot2)
-
-ggplot(fdi_min, aes(value, group = version)) +
-    geom_histogram() +
-    facet_wrap(~ version, scale = 'free') +
-    xlab('') + ylab('Count\n') +
-    theme_bw()
+```{r}
+hist(wdi$altern_min_max)
 ```
 
 ## <i class="fa fa-balance-scale"></i> Z-Score rescale
@@ -357,23 +359,13 @@ z_score <- function(x) {
 Now use the function:
 
 ```{r}
-fdi$fdi_z_score <- z_score(fdi$foreign_direct_investment)
+wdi$altern_z_score <- z_score(wdi$alternative_energy)
 ```
 
-## <i class="fa fa-balance-scale"></i> Compare original to Z-Score
+## <i class="fa fa-balance-scale"></i> Examine Z-Score distribution
 
-```{r include=FALSE}
-fdi_z <- fdi[, c('iso2c', 'year', 'foreign_direct_investment', 'fdi_z_score')]
-
-fdi_z <- fdi_z %>% gather(version, value, 3:4)
-```
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(fdi_z, aes(value, group = version)) +
-    geom_histogram() +
-    facet_wrap(~ version, scale = 'free') +
-    xlab('') + ylab('Count\n') +
-    theme_bw()
+```{r}
+hist(wdi$altern_z_score)
 ```
 
 ## <i class="fa fa-undo"></i> Reverse a variable's direction
@@ -393,24 +385,26 @@ reverse_direction <- function(x) max(x, na.rm = T) - x
 Now use the function:
 
 ```{r}
-fdi$fdi_z_reverse <- reverse_direction(fdi$fdi_z_score)
+wdi$altern_z_reverse <- reverse_direction(wdi$altern_z_score)
 ```
 
-## <i class="fa fa-undo"></i> Reverse
+## <i class="fa fa-undo"></i> Examine reversed distribution
 
-```{r include=FALSE}
-fdi_rev <- fdi[, c('iso2c', 'year', 'fdi_z_score', 'fdi_z_reverse')]
-
-fdi_rev <- fdi_rev %>% gather(version, value, 3:4)
+```{r}
+hist(wdi$altern_z_reverse)
 ```
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(fdi_rev, aes(value, group = version)) +
-    geom_histogram() +
-    facet_wrap(~ version, scale = 'free') +
-    xlab('') + ylab('Count\n') +
-    theme_bw()
-```
+## You try
+
+Put the following other variables on a Z-Score scale:
+
+- `electricity_use`
+
+- `co2_emissions`
+
+- `population_growth`
+
+- `alternative_energy`
 
 ## <i class="fa fa-plus"></i> Weight/Aggregate
 
@@ -436,7 +430,7 @@ wdi_sub$alternative_energy <- reverse_direction(wdi_sub$alternative_energy)
 
 Imagine we have four variables that we want to combine into an Environmental Unsustainability index: `electricity_use`, `co2_emissions`, `population_growth`, and `alternative_energy`.
 
-We have use z-scores to rescale them and reversed the direction of `alternative_energy`. 
+We have use z-scores to rescale them and reversed the direction of `alternative_energy`.
 
 The results are in a data frame called `wdi_sub`.
 
@@ -498,7 +492,7 @@ plot(map)
 
 ## <i class="fa fa-line-chart"></i> Index over time
 
-When you create an index for units (e.g. countries) over time (e.g. years) it is useful to also plot these changes. 
+When you create an index for units (e.g. countries) over time (e.g. years) it is useful to also plot these changes.
 
 ```{r message=FALSE}
 # Select specific countries
@@ -506,12 +500,12 @@ keep <- c('China', 'Saudi Arabia', 'France', 'United States',
           'South Africa', 'United Kingdom')
 wdi_countries <- subset(wdi_sub, country %in% keep)
 
-# Plot 
+# Plot
 library(ggplot2)
-index_plot <- ggplot(wdi_countries, 
-                     aes(x = year, y = unsustainability, 
+index_plot <- ggplot(wdi_countries,
+                     aes(x = year, y = unsustainability,
                          colour = country)) +
-    geom_line() + xlab('') + 
+    geom_line() + xlab('') +
     ylab('Environmental Unsustainability Index\n') +
     theme_bw()
 ```
@@ -523,14 +517,13 @@ index_plot
 ```
 
 
-## Experiment 
+## Experiment
 
 It is important to **try and compare** multiple weighting schemes to examine how sensitive the index is to each one.
 
+## <i class="fa fa-arrow-circle-o-up"></i> You do . . .
 
-## <i class="fa fa-arrow-circle-o-up"></i> Seminar: Make an Index
-
-With a partner, using World Bank Development Indicators create an Educational Achievement Index:
+With a partner, using World Bank Development Indicators create an **Educational Achievement Index**:
 
 - Select and download at least 4 indicators
 
@@ -542,4 +535,4 @@ With a partner, using World Bank Development Indicators create an Educational Ac
 
 - Weight and aggregate the variables into an composite index.
 
-- Display the results (histogram and map)
+- Display the results (line chart and map)
