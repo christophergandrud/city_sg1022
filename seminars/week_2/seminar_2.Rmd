@@ -1,4 +1,4 @@
----
+    ---
 title: 'SG1022 Seminar 2: Composite Indicators'
 author: "Christopher Gandrud"
 date: '2016'
@@ -89,7 +89,7 @@ head(methane)
 
 ## Download WDI (multiple indicators)
 
-We can download multiple indicators at once. To do this simply create a **vector of ID code strings**. 
+We can download multiple indicators at once. To do this simply create a **vector of ID code strings**.
 
 Let's download the following 5 indicators related to environmental sustainability:
 
