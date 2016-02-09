@@ -20,6 +20,7 @@ pal <- brewer.pal(8, "Set2")
 # September 2015
 ## http://www.bundeskanzlerin.de/Content/EN/Artikel/2015/09_en/2015-09-09-generaldebatte-merkel_en.html
 clean_sept <- Corpus(DirSource('refugees_pre/')) %>%
+    tm_map(content_transformer(tolower)) %>%
     tm_map(stripWhitespace) %>%
     tm_map(removePunctuation) %>%
     tm_map(removeNumbers) %>%
@@ -33,6 +34,7 @@ wordcloud(clean_sept, scale=c(8, 0.2),
 # January 2016
 # http://www.bundeskanzlerin.de/Content/EN/Artikel/2016/01_en/2016-01-11-konsequenzen-nach-koeln_en.html
 clean_jan <- Corpus(DirSource('refugees_post/')) %>%
+    tm_map(content_transformer(tolower)) %>%
     tm_map(stripWhitespace) %>%
     tm_map(removePunctuation) %>%
     tm_map(removeNumbers) %>%

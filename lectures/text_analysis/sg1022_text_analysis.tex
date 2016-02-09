@@ -53,8 +53,6 @@
 
         \item The general process
 
-        \item Specific issues with human coding
-
         \item Specific issues with machine coding
 
         \item Pros and Cons
@@ -91,10 +89,6 @@
 
     \vspace{0.5cm}
 
-    E.g. independent researchers come to the understanding of the text using the same method.
-
-    \vspace{0.5cm}
-
     Replicable results are more reliable.
 
 }
@@ -124,7 +118,7 @@
 
     \vspace{0.5cm}
 
-    In this course we focus exclusively on texts composed of words.
+    In this course we focus exclusively on written texts composed of words.
 
 }
 
@@ -233,7 +227,7 @@
 
     \vspace{1cm}
 
-    For example, in an ideal world we may want to survey world leaders for their preferences to handling Syrian refugees. We may want to see how these preferences change over time.
+    For example, in an ideal world we may want to survey world leaders for their preferences for handling Syrian refugees. We may want to see how these preferences change over time.
 
     \vspace{1cm}
 
@@ -286,7 +280,7 @@
 \frame{
     \frametitle{Text analysis in social science (examples)}
 
-    We may have research questions about units that are not able to be surveyed, but which produce texts.
+    We may have research questions about units that are not able to answer a questionnaire, but which produce texts.
 
     \vspace{1cm}
 
@@ -332,7 +326,7 @@
 \frame{
     \frametitle{Text analysis in social science (examples)}
 
-    We may have research questions about widely held beliefs across time, where a survey would be {\large{too costly}} to run.
+    We may have research questions about widely held beliefs across time, for which a survey would be {\large{too costly}} or even impossible to run.
 
     \vspace{1cm}
 
@@ -364,14 +358,14 @@
 }
 
 \frame{
-    \frametitle{Common output}
+    \frametitle{Common data output}
 
     Text analysis can create data that is:
 
     \vspace{0.5cm}
 
     \begin{itemize}
-        \item {\large{Discrete}}: e.g. the mains topic of your texts.
+        \item {\large{Discrete}}: e.g. the main topics of a text.
 
         \vspace{0.5cm}
 
@@ -380,7 +374,7 @@
 
     \vspace{0.5cm}
 
-    The choice largely depends on what is relevant for you {\large{research question}}.
+    The choice largely depends on your {\large{research question}}.
 
 }
 
@@ -390,7 +384,7 @@
 \frame{
     \frametitle{Human vs. Machine coding}
 
-    You can analyse texts either by relying exclusively on human coders or primarily rely on machine-assistance.
+    You can analyse texts either by relying exclusively on human coders or also rely on machine-assistance.
 
 }
 
@@ -400,7 +394,7 @@
 
     \vspace{0.5cm}
 
-    Do the assigned codes make sense in relation to the context?
+    Do the machine assigned codes make sense in relation to the context?
 
 }
 
@@ -410,7 +404,7 @@
     Machine coding has the advantage of being much more {\large{efficient}} for large numbers of texts.
 
         \begin{itemize}
-            \item For example, it would be basically impossible for GDELT to create a daily updated index of world leader press coverage with human coders.
+            \item For example, it would basically be impossible for GDELT to create a daily updated index of world leader press coverage with human coders.
         \end{itemize}
 
     \vspace{1cm}
@@ -478,7 +472,7 @@
 
     \vspace{0.5cm}
 
-    For example, if you want to code press attitudes towards immigrants, but only gather articles from The Guardian, you will get much different results than if you only sampled The Daily Mail.
+    For example, if you want to code press attitudes towards immigrants, but only gather articles from \emph{The Guardian}, you will get much different results than if you only sample \emph{The Daily Mail}.
 
     \vspace{1cm}
 
@@ -487,9 +481,24 @@
 }
 
 \frame{
+    \frametitle{Advanced: web scraping}
+
+    New tools for {\large{automatically gathering--web scraping--}}large numbers of texts from the internet.
+
+    \vspace{1cm}
+
+    Can make the data collection process {\large{dramatically faster}} and {\large{more reproducible}}.
+
+    \vspace{1cm}
+
+    We do not cover these tools in this course.
+
+}
+
+\frame{
     \frametitle{Gather your sample}
 
-    When you gather your sample (your {\large{Corpus}}), in order to enhance reproducibility, it should be {\large{well-organised}} and {\large{electronically available}}.
+    In order to enhance reproducibility, when you gather your sample (your {\large{Corpus}}) it should be {\large{well-organised}} and {\large{electronically available}}.
 
 }
 
@@ -499,21 +508,27 @@
     Always consider {\large{reliability}} when developing your coding scheme.
 
     \begin{itemize}
-        \item Will another coder make the same choices given your coding scheme?
+        \item Will another coder make the same choices given only the information in your coding scheme?
     \end{itemize}
 
-    So, always {\large{fully document}} your coding scheme and explain your rationale.
+    \vspace{1cm}
+
+    So, always {\large{fully document}} your coding scheme and {\large{explain your rationale}}.
 
 }
 
 \frame{
     \frametitle{Develop a coding scheme (1)}
 
-    Determine if you want to create a {\large{discrete}} (e.g. main topic of the text) or {\large{continuous}} coding scheme (e.g. attitude scale). This should be based on {\large{relevance to your research question}}.
+    Determine if you want to create a {\large{discrete}} (e.g. main topic of the text) or {\large{continuous}} coding scheme (e.g. attitude scale). T
 
     \vspace{1cm}
 
-    {\large{Skim}} a sub-sample of the texts to {\large{make a list}} of possible topics, words that would indicate a particular attitude, etc.
+    This decision should be based on {\large{relevance to your research question}}.
+
+    \vspace{1cm}
+
+    {\large{Skim}} a sub-sample of the texts to {\large{make a list}} of possible topics or words that would indicate a particular attitude, etc.
 
 }
 
@@ -554,9 +569,14 @@
 
         \begin{itemize}
             \item This is known as high {\large{inter-rater reliability}}
+
+            \item Simple tests for this would be a correlation coefficient (for continuous codes) or $X^2$ tests (for discrete codes). Note: a lack of independence between the two raters' scores is what you want.
         \end{itemize}
 
-    \vspace{0.5cm}
+}
+
+\frame{
+    \frametitle{Check reliability}
 
     If there is considerable disagreement between raters, you need to {\large{re-evaluate your coding scheme}} and possibly {\large{recode your corpus}}.
 
@@ -594,7 +614,7 @@
 
         \vspace{0.5cm}
 
-        \item Simple word count methods of text analysis.
+        \item {\large{Simple word frequency}} methods of text analysis.
     \end{itemize}
 
 }
@@ -630,7 +650,7 @@
 
             \item For example: \emph{family}, \emph{\emph{families}}, \emph{families'}, \emph{familial}, are changed to their stem: \emph{famili}.
 
-            \item Related to \emph{lemmatization}.
+            \item Stemming is related to linguistic concept called \emph{lemmatization}.
 
         \end{itemize}
 
@@ -643,6 +663,69 @@
     \end{center}
 }
 
+\frame{
+
+    \begin{center}
+        Once you have preprocessed your data, then you can have your computer code the corpus.
+    \end{center}
+}
+
+\frame{
+    \frametitle{Word frequency}
+
+    In this course, we are going to focus on {\large{word frequency}} methods.
+
+    \vspace{0.5cm}
+
+    Note, you should focus on the {\large{relative requency}} of a word. Most simply:
+
+    \begin{equation}
+        \mathrm{Relative\:Frequency} = \frac{\mathrm{Freq.\:of\:word\:in\:text}}{\mathrm{Total\:words\:in\:text}}
+    \end{equation}
+
+    \vspace{1cm}
+
+    Corrects for words being more frequent because a text is longer.
+}
+
+\frame{
+    \frametitle{Word frequency}
+
+        Word frequency is an efficient way to help you {\large{reproducibly summarise}} many texts,
+
+        \begin{center}
+            \emph{but\ldots}
+        \end{center}
+
+        word frequencies have {\large{have no inherent meaning}}.
+
+        \vspace{0.5cm}
+
+        You still need to code what the frequency of a word means, relative to the context and your research question.
+
+}
+
+\frame{
+    \frametitle{Simple example: January 2016 Press Release}
+
+    \begin{center}
+        \includegraphics[scale=0.3]{img/jan_chancellor.pdf}
+    \end{center}
+
+    Refugees discussed in terms of the topic \ldots
+
+}
+
+\frame{
+    \frametitle{Simple example: January 2016 Press Release}
+
+    \begin{center}
+        \includegraphics[scale=0.3]{img/jan_chancellor.pdf}
+    \end{center}
+
+    Refugees discussed in terms of the topic \emph{crimminality}.
+
+}
 
 \section{Pros and Cons}
 
