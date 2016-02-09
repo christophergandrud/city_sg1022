@@ -1,0 +1,122 @@
+---
+title: 'SG1022 Seminar 4: Text analysis'
+author: "Christopher Gandrud"
+date: '2016'
+output:
+  ioslides_presentation:
+    css: https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css
+    logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
+  pdf_document: default
+---
+
+## <i class="fa fa-arrow-circle-o-up"></i> Objectives
+
+- Selecting and Gathering a corpus of text data
+
+- Importing the text data into R
+
+- Preprocessing the data 
+
+- Creating word frequency plots and word clouds
+
+## <i class="fa fa-check"></i> Pop Quiz
+
+- What is a *corpus*?
+
+- What does it mean to *preprocess* texts and why is this important?
+
+- What kind of data can you generate from text analysis?
+
+- What is a stopword?
+
+## Packages
+
+You will need have the following packages installed and loaded:
+
+- dplyr
+
+- tm
+
+- wordcloud
+
+- RColorBrewer
+
+## Selecting your data
+
+Imagine that we want to compare the German Chancellor's discussion of refugees before and after the 2015-16 Cologne New Year's Eve Incident
+
+To do this we might gather a corpus of press releases from the German Chancellor's website. 
+
+## <i class="fa fa-download"></i> Gather the data
+
+**Note:** The most efficient way to gather text data from the internet is with *automated web scraping*. 
+
+We will not cover this tool in this class. Instead we will hand download the texts. This is *laborious* so if you are interested in web scraping see me for more details.
+
+## <i class="fa fa-download"></i> Directory set up: 
+
+First create the folders that you will save the data into. We want to create one common directory called `press_releases`. Then create to sub-folders: `refugees_pre` and `refugees_post`. 
+
+```{r eval=F}
+press_releases
+|_
+    refugees_pre
+    refugees_post
+```
+
+## <i class="fa fa-download"></i> Copy-paste (1)
+
+Now go to the following website, copy the speech text, and paste the text into new **text files** called `chancellory_refugees_2015_09_09.txt`. Save this file into the `refugees_pre` folder.
+
+- <http://www.bundeskanzlerin.de/Content/EN/Artikel/2015/09_en/2015-09-09-generaldebatte-merkel_en.html>
+
+**Note**: To create a new text file in RStudio Click `New File > Text File`.
+
+It is important to give the **files meaningful names** to help you identify them later.
+
+In this example we only have one text in the `refugees_pre` folder. But you can include many more.
+
+## <i class="fa fa-download"></i> Copy-paste (2)
+
+Do the same for the transcript at the following URL. Save the text into a file called `chancellory_refugees_2016_01_12.txt` in the `refugees_post` folder.
+
+- <http://www.bundeskanzlerin.de/Content/EN/Artikel/2016/01_en/2016-01-11-konsequenzen-nach-koeln_en.html>
+
+## Load the texts into R
+
+To load the texts into, first set your working directory to be the `press_releases` folder with the `setwd` function.
+
+See Week 3's seminar for how to set the working directory.
+
+## Load the texts into R. 
+
+We will use the `tm` (text mining) package to load the data and pre-process it. To load the data use the `Corpus` function. We need to do this twice, once for the press releases before the Cologne Attacks and once for the press releases after:
+
+```{r, message=FALSE}
+library(tm)
+
+# Press releases before attacks
+pre <- Corpus(DirSource('refugees_pre/'))
+
+# Press releases after attacks
+post <-  Corpus(DirSource('refugees_post/'))
+```
+
+You should see two new `list` class objects in your **Environment** pane, one called `pre` and the other called `post`.
+
+These functions will **load all** of the `.txt` text files into R that 
+
+## Preprocessing
+
+Imagine that we want to preprocess the texts by:
+
+- converting all of the letters to lower case
+
+- removing extra spaces between words
+
+- removing punctuation
+
+- removing numbers
+
+- removing stopwords
+

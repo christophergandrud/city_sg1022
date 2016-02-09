@@ -6,6 +6,7 @@ output:
   ioslides_presentation:
     css: https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css
     logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
+  pdf_document: default
 ---
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
@@ -16,32 +17,20 @@ output:
 
 - Using R to analyse surveys (cross-tabs, $X^2$, grouped bar plots)
 
+- Setting up Qualtrics
+
+- Critique survey design
+
 ## <i class="fa fa-check"></i> Pop Quiz
 
--
+- What is the `min-max` function and why would you use it when creating composite indicators?
 
-## <i class="fa fa-bolt"></i> Importance of understanding files/file structures
-
-- This topic may seem kind of . . . dry.
-
-- Why not just click and drag files with the GUI (Graphical User Interface)?
-
-## <i class="fa fa-bolt"></i> Importance of understanding files/file structures
-
-- **Reproducibility**: other researchers only have your files. If they are **well
-    organised** and the **links** between the files are **explicitly stated**
-    then they can better understand what you did.
-
-    + Clearest way of explicitly stating links is **dynamically** using file
-    paths in your source code.
-
-- **You**: well organised files will be easier for you to find/understand/use
-    in the future.
+- What is the `library` function and when do you use it?
 
 
 ## <i class="fa fa-folder-open-o"></i> File paths
 
-- Files are organised **hierarchically** into (upside down) trees.
+Files are organised **hierarchically** into (upside down) trees.
 
 ```{r eval=FALSE}
 Root
@@ -52,22 +41,38 @@ Root
         Child2
 ```
 
+## Example file path
+
+The file path `C:\group_project\data\data_set.csv` represents the tree:
+
+```{r eval=FALSE}
+C
+|_
+    group_project
+    |_
+        data
+        |_
+            data_set.csv
+
+```
+
+
 ## <i class="fa fa-folder-open-o"></i> Root
 
 **Root** directories are the **first level of a disk**.
 
 They are the root out of which the file tree grows.
 
-**Naming Conventions**:
+**Root naming conventions**:
 
 **Linux/Mac**: `/`
 
-- e.g. `/git_repos` means that the `git_repos` directory is a child
+- e.g. `/group_project` means that the `group_project` directory is a child
 of the root directory.
 
 **Windows**: the disk is partitioned, e.g. the `C` partition is denoted `C:\`.
 
-- `C:\git_repos` indicates that the `git_repos` directory is a child
+- `C:\group_project` indicates that the `group_project` directory is a child
 of the `C` partition.
 
 ## <i class="fa fa-folder-open-o"></i> Sub (child) directories
@@ -76,13 +81,13 @@ Sub (child) directories are denoted with a `/` in Linux/Mac and `\` in Windows, 
 
 ```{r engine='sh', eval=FALSE}
 # Linux/Mac
-/git_repos/Project1
+/group_project/data
 
 # Windows
-C:\git_repos\Project1
+C:\group_project\data
 ```
 
-<i class="fa fa-exclamation"></i> R tip:
+<i class="fa fa-exclamation"></i> **R tip**:
 
 - In R for Windows you either use two backslashes `\\` (`\` is the R [escape
 character](http://en.wikipedia.org/wiki/Escape_character))
@@ -112,8 +117,8 @@ list.files()
 ```
 
 ```{r, eval=FALSE}
-# Set root as working directory
-setwd('/')
+# Set group project as working directory
+setwd('C:\\group_project')
 ```
 
 ## <i class="fa fa-folder-open-o"></i> Relative vs. Absolute file paths
@@ -121,12 +126,12 @@ setwd('/')
 Use **relative file paths** when possible.
 
 - **Absolute file path**: the entire path on a particular system,
-    + E.g. `/git_repos/Project1/data.csv`
+    + E.g. `C:\\group_project/data/data_set.csv`
 
 - **Relative file path**: the path relative to the working directory.
 
-    + E.g. if `/git_repos` is the working directory then the relative path for
-    `data.csv` is `Project1/data.csv`.
+    + E.g. if `C:\\group_project` is the working directory then the relative path for
+    `data_set.csv` is `data/data_set.csv`.
 
 Why?
 
@@ -148,21 +153,35 @@ Alternatives:
 
 ## Loading data into R
 
-R can load data from many different file formats (e.g. .sav (SPSS), .xlsx (Excel), .dta (Stata), .csv).
+R can load data from many different file formats (e.g. `.sav` (SPSS), `.xlsx` (Excel), `.dta` (Stata), `.csv`).
 
 The [rio](https://github.com/leeper/rio) (R input/output) package makes it very easy to import many different types of data.
 
 It has two key functions `import` and `export`.
 
+**Remember:** You will need to `install.packages` rio and then load it into your workspace with `library`.
+
 ## Rio `import` for loading data into R
 
-```{r, warning=FALSE}
+**First**, download the `ESS5_UKonly.sav` data set from Moodle (it's under Week 3). Create a folder called `sg1022_data` and place the data file into it.
+
+**Second**, set your working directory to the folder where the data is located. For example, if your data is in `C:\\sg1022_data` then use:
+
+```{r, eval=FALSE}
+setwd('C:\\sg1022_data/')
+```
+
+## Rio `import` for loading data into R
+
+Now load the data using the file's name (`ESS5_UKonly.sav`)
+
+```{r message=FALSE, warning=FALSE}
 library(rio)
-setwd('/git_repositories/city_sg1022/seminars/week_3/data/')
 
 # Load ESS 5 (UK) only data from SPSS format
 ess5_uk <- import('ESS5_UKonly.sav')
 
+# Show a selection of the data.
 head(ess5_uk[1:3, 1:6])
 ```
 
@@ -178,9 +197,31 @@ export(ess5_uk, 'ess5_uk.csv')
 
 ## Review: factors (categorical data)
 
-In R, categorical data is coded using *factors*.
+```{r include=FALSE}
+# Create fake data
+#library(randomNames)
 
-Imagine we have a data with three categories:
+#persons <- randomNames(n = 1000)
+#income <- sample(1:3, size = 1000, replace = T, prob = c(0.5, 0.4, 0.1))
+#kanye_or_wiz <- sample(c('kanye', 'wiz'), size = 1000, replace = T, 
+#                       prob = c(0.63, 1 - 0.63))
+#ex_income <- data.frame(persons, income, kanye_or_wiz)
+#export(ex_income, 'example_kw.csv')
+```
+
+In R, categorical data is coded using **factors**.
+
+Let's load a simple data set into R for this example: `example_kw.csv`. 
+
+This file is located on Moodle (Week 3) . Download it and place it into your `sg1022_data` directory. Now load it into a new object called `example`.
+
+```{r message=FALSE}
+example <- import('example_kw.csv')
+```
+
+## Review: factors (categorical data)
+
+This data set has a numeric variable called `income`. We want to convert it to a factor with three category labels:
 
 | Number Code | Label         |
 | ----------- | ------------- |
@@ -188,40 +229,28 @@ Imagine we have a data with three categories:
 | 2           | Medium income |
 | 3           | High income   |
 
-## Factors
-
-Imagine data is loaded into R just with the numbers:
-
-```{r include=FALSE}
-library(randomNames)
-persons <- randomNames(n = 1000)
-income <- sample(1:3, size = 1000, replace = T)
-ex_income <- data.frame(persons, income)
-ex_income$persons <- as.character(ex_income$persons)
-```
-
-```{r}
-head(ex_income)
-```
-
 ## Factor labels
 
-To convert this variable to a factor and add labels use `factor`.
+To convert this variable to a factor and add labels use the `factor` function.
 
 ```{r}
+# Create a vector of level labels
 income_labels <- c('Low income', 'Medium income', 'High income')
 
-ex_income$income <- factor(ex_income$income, labels = income_labels)
+# Convert income to factor and apply labels
+example$income <- factor(example$income, 
+                               labels = income_labels)
 
-summary(ex_income$income)
+# Create simple frequency table
+summary(example$income)
 ```
 
 ## Converting from character strings to factors (1)
 
-Sometimes you will have data that is in character strings (R sees letters, but doesn't see any categories), but you want it to be categorical.
+Sometimes you have data that is in character strings (R sees letters, but doesn't see any categories), but you want it to be a factor. For example:
 
 ```{r}
-summary(ex_income$persons)
+summary(example$kanye_or_wiz)
 ```
 
 ## Converting from character strings to factors (2)
@@ -229,57 +258,71 @@ summary(ex_income$persons)
 Simply run it through `as.factor`. R will turn it into a factor and use the character strings as factor labels.
 
 ```{r}
-ex_income$persons <- as.factor(ex_income$persons)
+example$kanye_or_wiz <- as.factor(example$kanye_or_wiz)
 
-summary(ex_income$persons)
-
+summary(example$kanye_or_wiz)
 ```
 
 ## Frequency table (categorical variables)
 
+Remember, use `summary` to create a basic frequency table of a factor variable in R.
+
 ```{r, message=FALSE}
-library(MASS)
-smoking_freq <- table(survey$Smoke)
-smoking_freq
+income_freq <- summary(example$income)
+income_freq
+```
+
+We can convert these counts to proportions with `prop.table`:
+
+```{r}
+income_prop <- prop.table(income_freq)
+income_prop
+```
+
+
+## Barplot (frequencies)
+
+Show the frequencies more effectively with a barplot. To create a barplot of a single factor variable just use `plot`:
+
+```{r}
+plot(example$income, main = 'Income Level')
+```
+
+## Barplot (proportions)
+
+You can also plot the proportions you created before. This time you need to explicitly use `barplot`.
+
+```{r}
+barplot(income_prop, main = 'Income Level', ylab = 'Proportion')
 ```
 
 ## Joint distributions (categorical variables)
 
-Contingency table
-```{r}
-smoking <- table(survey$Smoke, survey$Exer)
-smoking
-```
-
-## Reorder factors
-
-You may want to **change the order** of a factor's variable's levels so that makes more substantive sense.
+Use `table` to create a simple contingency table:
 
 ```{r}
-# Relevel
-survey$Smoke <- factor(survey$Smoke,
-                       levels = c('Never', 'Occas', 'Regul', 'Heavy'))
-survey$Exer <- factor(survey$Exer, levels = c('None', 'Some', 'Freq'))
-
-# Re-create table
-smoking <- table(survey$Smoke, survey$Exer)
-smoking
+support <- table(example$kanye_or_wiz, example$income)
+support
 ```
+
+**Note:** the contingency table you create with the `table` function **is the basis for all** of the following cross-tabs, barplots, and $X^2$ tests.
 
 ## Cross-tabs with proportions
 
-```{r}
-prop.table(smoking, margin = 1) # row proportions
+Use `prop.table` again to find the contingency table proportions:
 
-prop.table(smoking, margin = 2) # column proportions
+```{r}
+prop.table(support, margin = 1) # row proportions
+
+prop.table(support, margin = 2) # column proportions
 ```
 
 ## Plotting (grouped bar chart)--Base R
 
 ```{r}
-barplot(smoking, beside = TRUE, xlab = 'Excercise Frequency',
-    col = c('darkgreen', 'coral', 'coral2', 'coral4'),
-    legend = rownames(smoking), args.legend = list(title = 'Smoking'))
+barplot(support, beside = TRUE, col = c('yellow', 'blue'),
+  xlab = 'Income Level', ylab = 'Count',
+  legend = rownames(support), args.legend = list(title = 'Support?'))
 ```
 
 ## Colours in R
@@ -288,64 +331,71 @@ For a list of R colour names see: <http://www.stat.columbia.edu/~tzheng/files/Rc
 
 ## Plotting Percentages--Base R (1)
 
-To plot proportions (easier for cross-group comparability), first create a table of the proportions.
+To plot proportions (easier for cross-group comparability), first create a table of the proportions:
 
 ```{r}
-prop_smoking <- prop.table(smoking, margin = 2) # column proportion
-
-prop_smoking
+support_prop <- prop.table(support, margin = 2) # column proportion
+support_prop
 ```
 
-## Plotting Percentages--Base R (2)
+Then give these to `barplot` as before . . .
+
+## Plotting Proportions--Base R (2)
 
 ```{r}
-barplot(prop_smoking, beside = TRUE, xlab = 'Excercise Frequency',
-    col = c('darkgreen', 'coral', 'coral2', 'coral4'),
-    legend = rownames(smoking), args.legend = list(title = 'Smoking'))
+barplot(support_prop, beside = TRUE, col = c('yellow', 'blue'),
+  xlab = 'Income Level', ylab = 'Proportion',
+  legend = rownames(support), args.legend = list(title = 'Support?'))
 ```
 
 ## Plotting Percentages--Base R (1)
 
-To plot proportions (easier for cross-group comparability), first create a table of the proportions.
+To plot percentages, simply convert the proportions to percents by multiplying them by 100:
 
 ```{r}
 # Convert to percentages
-perc_smoking <- prop_smoking * 100
-
-perc_smoking
+support_perc <- support_prop * 100
+support_perc
 ```
+
+Then give these to `barplot` as before . . .
 
 ## Plotting Percentages--Base R (2)
 
 ```{r}
-barplot(perc_smoking, beside = TRUE, xlab = 'Excercise Frequency',
-    col = c('darkgreen', 'coral', 'coral2', 'coral4'),
-    legend = rownames(smoking), args.legend = list(title = 'Smoking'))
+barplot(support_perc, beside = TRUE, col = c('yellow', 'blue'),
+  xlab = 'Income Level', ylab = 'Percentage',
+  legend = rownames(support), args.legend = list(title = 'Support?'))
 ```
 
 ## Joint distributions (categorical variables)
 
 $\chi^2$ Test
 ```{r, warning=FALSE}
-chisq.test(smoking)
-
+chisq.test(support)
 ```
+
+Based on this test: is there a statistically significant association between income level and support for Kanye West and Wiz Khalifa?
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Seminar: Work with example survey data
 
-- Set up a Qualtrics Survey.
+1. Set up a Qualtrics Survey using *Worksheet: introduction to Qualtrics* on Moodle under *Qualtrics Resources*.
 
-- Administer survey to your fellow students
-
-- Download data and import it into R.
-
-- Create contingency tables and grouped bar charts.
+2. With a partner complete the survey design worksheet.
 
 
-## <i class="fa fa-arrow-up"></i> Plotting (grouped bar chart)--ggplot2
+## <i class="fa fa-arrow-up"></i> Extras: reorder factors
+
+You may want to **change the order** of a factor's variable's levels so that makes more substantive sense. For example:
 
 ```{r}
-library(ggplot2); ggplot(survey, aes(Exer, fill = Smoke)) +
-    geom_bar(position = 'dodge') +
-    xlab('Exercise Frequency') + theme_bw()
+library(MASS) # Contains example data set
+
+# Relevel
+survey$Smoke <- factor(survey$Smoke,
+                       levels = c('Never', 'Occas', 'Regul', 'Heavy'))
+survey$Exer <- factor(survey$Exer, levels = c('None', 'Some', 'Freq'))
+
+# Create contingency table
+smoking <- table(survey$Smoke, survey$Exer)
 ```
