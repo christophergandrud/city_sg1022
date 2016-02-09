@@ -49,11 +49,15 @@
 
         \item What is text analysis and why use it?
 
-        \item Human coding
+        \item Human vs. machine coding
 
-        \item Automated coding
+        \item The general process
 
-        \item Pitfalls
+        \item Specific issues with human coding
+
+        \item Specific issues with machine coding
+
+        \item Pros and Cons
 
     \end{itemize}
 
@@ -178,13 +182,23 @@
 
 }
 
+%\frame{
+
+%    \begin{center}
+%        \includegraphics[scale=0.45]{img/whats_app.png}
+%    \end{center}
+
+%    {\tiny{Source: http://www.buzzfeed.com/shayanroy/blocking-you-now#.obE7eXDgAP}}
+
+%}
+
 \frame{
 
     \begin{center}
-        \includegraphics[scale=0.45]{img/whats_app.png}
+        \includegraphics[scale=0.4]{img/facebook.png}
     \end{center}
 
-{\tiny{Source: http://www.buzzfeed.com/shayanroy/blocking-you-now#.obE7eXDgAP}}
+{\tiny{Source: http://www.buzzfeed.com/jessicamisener/stupidest-things-ever-said-on-facebook#.elRz03arDM}}
 
 }
 
@@ -331,7 +345,7 @@
 
 
     \begin{center}
-        \includegraphics[scale=0.2]{img/perceptions_compare.png}
+        \includegraphics[scale=0.17]{img/perceptions_compare.png}
     \end{center}
 
     {\tiny{Source: Gandrud and Hallerberg (2016)}}
@@ -339,17 +353,34 @@
 }
 
 \frame{
+    \frametitle{GDELT Global Leaders Press Coverage}
+
+    \begin{center}
+        \includegraphics[scale=0.35]{img/gdelt_leaders.png}
+    \end{center}
+
+    {\tiny{Source: http://data.gdeltproject.org/worldleadersindex/GDELT\_Leaders\_Index-2016-02-05.pdf}}
+
+}
+
+\frame{
     \frametitle{Common output}
 
-    Generally, text analysis results in data that is:
+    Text analysis can create data that is:
+
+    \vspace{0.5cm}
 
     \begin{itemize}
-        \item Nominal: e.g. the main topic of a text.
+        \item {\large{Discrete}}: e.g. the mains topic of your texts.
 
-        \vspace{1cm}
+        \vspace{0.5cm}
 
-        \item Continuous: e.g. scale (negative to positive, left-right), proportion of a document dedicated to a specific word or words.
+        \item {\large{Continuous}}: e.g. proportion of a document dedicated to a specific word or words, scale (negative to positive, left-right).
     \end{itemize}
+
+    \vspace{0.5cm}
+
+    The choice largely depends on what is relevant for you {\large{research question}}.
 
 }
 
@@ -361,16 +392,279 @@
 
     You can analyse texts either by relying exclusively on human coders or primarily rely on machine-assistance.
 
-    \vspace{1cm}
+}
 
-    Note: you should {\large{never exclusively rely on machine coding}}. At a minimum, you need to check the validity of your machine codes. Do they make sense?
+\frame{
+    \frametitle{Human vs. Machine coding}
+    Note: you should {\large{never exclusively rely on machine coding}}. At a minimum, you need to check the validity of your machine assigned codes.
 
-    \vspace{1cm}
+    \vspace{0.5cm}
 
-    Machine coding has the advantage of being much more {\large{efficient}} for large numbers of texts + more easily {\large{reproducible}}.
+    Do the assigned codes make sense in relation to the context?
 
 }
 
+\frame{
+    \frametitle{Human vs. Machine coding}
+
+    Machine coding has the advantage of being much more {\large{efficient}} for large numbers of texts.
+
+        \begin{itemize}
+            \item For example, it would be basically impossible for GDELT to create a daily updated index of world leader press coverage with human coders.
+        \end{itemize}
+
+    \vspace{1cm}
+
+    Machine coding is often more easily {\large{reproducible}} and update-able.
+}
+
+\frame{
+    \frametitle{Human and Machine coding similarities}
+
+    \begin{center}
+        Regardless of whether you use human or machine coding, the general text analysis {\large{process is the same}}.
+    \end{center}
+
+}
+
+\section{General Text Analysis Steps}
+
+\frame{
+    \frametitle{Text analysis steps}
+
+    \begin{enumerate}
+
+        \item {\large{Define}} the population of texts you are interested in (e.g. press releases by a particular organisation, open-ended survey responses).
+
+        \vspace{0.5cm}
+
+        \item Gather your {\large{sample of texts}}
+
+        \vspace{0.5cm}
+
+        \item {\large{Develop}} a coding scheme and {\large{classify}} your texts.
+
+        \vspace{0.5cm}
+
+        \item Establish the {\large{reliability and validity}} of your classifications.
+
+    \end{enumerate}
+
+    {\tiny{Modified from: http://psc.dss.ucdavis.edu/sommerb/sommerdemo/content/doing.htm}}
+
+}
+
+\frame{
+    \frametitle{Population}
+
+    At least two items to consider when defining your population of texts:
+
+    \vspace{0.5cm}
+
+    \begin{itemize}
+        \item Should be relevant for your research question.
+
+        \vspace{0.5cm}
+
+        \item Texts should be accessible.
+    \end{itemize}
+
+}
+
+\frame{
+    \frametitle{Gather your sample}
+
+    As with all data gathering, how you {\large{sample}} your texts can {\large{greatly affect your results}}.
+
+    \vspace{0.5cm}
+
+    For example, if you want to code press attitudes towards immigrants, but only gather articles from The Guardian, you will get much different results than if you only sampled The Daily Mail.
+
+    \vspace{1cm}
+
+    We will discuss sampling in more detail in Week 7.
+
+}
+
+\frame{
+    \frametitle{Gather your sample}
+
+    When you gather your sample (your {\large{Corpus}}), in order to enhance reproducibility, it should be {\large{well-organised}} and {\large{electronically available}}.
+
+}
+
+\frame{
+    \frametitle{Develop a coding scheme}
+
+    Always consider {\large{reliability}} when developing your coding scheme.
+
+    \begin{itemize}
+        \item Will another coder make the same choices given your coding scheme?
+    \end{itemize}
+
+    So, always {\large{fully document}} your coding scheme and explain your rationale.
+
+}
+
+\frame{
+    \frametitle{Develop a coding scheme (1)}
+
+    Determine if you want to create a {\large{discrete}} (e.g. main topic of the text) or {\large{continuous}} coding scheme (e.g. attitude scale). This should be based on {\large{relevance to your research question}}.
+
+    \vspace{1cm}
+
+    {\large{Skim}} a sub-sample of the texts to {\large{make a list}} of possible topics, words that would indicate a particular attitude, etc.
+
+}
+
+\frame{
+    \frametitle{Develop a coding scheme (2)}
+
+    From this initial list, create {\large{operational definitions}} of your topic categories or scale.
+
+    \begin{itemize}
+        \item In order to enable replication, make these definitions as {\large{clear and specific}} as possible.
+    \end{itemize}
+
+    \vspace{0.5cm}
+
+    Check that your definitions are {\large{comprehensive}}. Do they cover as many topics, words related to attitudes as possible?
+
+    \vspace{0.5cm}
+
+    Make sure that your definitions are {\large{mutually exclusive}}, i.e. there is {\large{no overlap}}.
+}
+
+\frame{
+
+    \begin{center}
+        Now, apply your coding scheme.
+    \end{center}
+
+}
+
+\frame{
+    \frametitle{Check reliability}
+
+    You should always have {\large{at least one other rater}} independently apply your coding scheme.
+
+    \vspace{0.5cm}
+
+    Then check the {\large{level of aggreement}}. Ideally, different coders will give the same codes to the same texts based on the same coding scheme.
+
+        \begin{itemize}
+            \item This is known as high {\large{inter-rater reliability}}
+        \end{itemize}
+
+    \vspace{0.5cm}
+
+    If there is considerable disagreement between raters, you need to {\large{re-evaluate your coding scheme}} and possibly {\large{recode your corpus}}.
+
+}
+
+\frame{
+    \frametitle{Check machine coded reliability}
+
+    If you used machine coding, then you should {\large{select a random sub-sample}} of the texts and check to see if the machine codes match {\large{your intended coding scheme}}.
+
+}
+
+\section{Special issues with machine coding}
+
+\frame{
+    \frametitle{Special issues: machine coding}
+
+    There are many different advanced techniques for machine coding:
+
+    \begin{center}
+        \includegraphics[scale=0.35]{img/grimmer_stewart.png}
+    \end{center}
+
+    {\tiny{Grimmer and Stewart (2013, 268)}}
+
+}
+
+\frame{
+    \frametitle{This course}
+
+    In this course we will focus on:
+
+    \begin{itemize}
+        \item The text {\large{preprocessing step}}.
+
+        \vspace{0.5cm}
+
+        \item Simple word count methods of text analysis.
+    \end{itemize}
+
+}
+
+\frame{
+    \frametitle{Preprecessing}
+
+    Regardless of the type of machine coding you use, you need to {\large{preprocess your texts}}.
+
+    \vspace{1cm}
+    This can include\ldots
+
+}
+
+\frame{
+    \frametitle{Preprecessing}
+        Removing unnecessary white space (spacing between words), punctuation, capitalisation, numbers, etc.
+}
+
+\frame{
+    \frametitle{Preprecessing}
+
+        Removing {\large{stopwords}}: function words that do not convey meaning like ``a'' and ``the''.
+
+}
+
+\frame{
+    \frametitle{Preprecessing}
+
+        {\large{Stem}} your words: reduce the ends of words to reduce the total number of unique words.
+
+        \begin{itemize}
+
+            \item For example: \emph{family}, \emph{\emph{families}}, \emph{families'}, \emph{familial}, are changed to their stem: \emph{famili}.
+
+            \item Related to \emph{lemmatization}.
+
+        \end{itemize}
+
+}
+
+\frame{
+
+    \begin{center}
+        Note: each preprocessing decision affects your results and so should be {\large{fully justified}}.
+    \end{center}
+}
+
+
+\section{Pros and Cons}
+
+\frame{
+    \frametitle{Some Pros and Cons of Text Analysis}
+
+    \begin{table}
+        {\footnotesize{
+        \begin{tabular}{p{4.5cm} p{4.5cm}}
+            {\large{Pros}} & {\large{Cons}} \\
+            \hline\hline \\[0.1cm]
+            Texts are a massive new source of social data & Results can be misleading if we don't appreciate the context within which the speech acts takes place. \\[0.3cm]
+            Useful for tracking changes over time & Purely descriptive, need to do more work to understand why \\[0.3cm]
+            Can be an inexpensive way to gather social data & Sampling bias (including if writers delete texts) can be a major challenge \\[0.1cm]
+            \hline
+        \end{tabular}
+        }}
+    \end{table}
+
+    {\tiny{Partially from http://psc.dss.ucdavis.edu/sommerb/sommerdemo/content/strengths.htm}}
+
+}
 
 
 \end{document}
