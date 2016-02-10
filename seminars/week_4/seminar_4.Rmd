@@ -3,10 +3,10 @@ title: 'SG1022 Seminar 4: Text analysis'
 author: "Christopher Gandrud"
 date: '2016'
 output:
-  pdf_document: default
   ioslides_presentation:
     css: https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css
     logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
+  pdf_document: default
 ---
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
@@ -55,7 +55,9 @@ To do this we might gather a corpus of press releases from the German Chancellor
 
 **Note:** The most efficient way to gather text data from the internet is with *automated web scraping*. 
 
-We will not cover this tool in this class. Instead we will hand download the texts. This is *laborious* so if you are interested in web scraping see me for more details.
+We mostly not cover this tool in this class. Instead we will hand download the texts. This is *laborious* so if you are interested in web scraping see me for more details.
+
+That being said: at the bottom of this seminar sheet, there are instructions for how to scrape tweets. Take a look if you are interested.
 
 ## <i class="fa fa-download"></i> Directory set up: 
 
@@ -257,7 +259,13 @@ For more advanced analysis techniques, see: <https://rstudio-pubs-static.s3.amaz
 
 A lot of these tools would be great to use in your group project. Please see me if you have questions.
 
-## Your turn
+## Your turn (1)
+
+Preprocess the corpus a number of different ways (for example, don't convert all letters to lower case).
+
+How does the word cloud change?
+
+## Your turn (2)
 
 Now it is your turn. With a partner: 
 
@@ -273,3 +281,73 @@ Now it is your turn. With a partner:
 
 - Validate your finding, by reading a few of the texts. Do your conclusions about the main topics from the wordclouds match your conclusions when you read the whole document? If not, why not?
 
+## Advanced: Scraping  Tweets (1)
+
+We can use the twitteR package to scrape Twitter. **Note:** to do this you need a Twitter account.
+
+First you need to get authenticated. Go to: <https://dev.twitter.com/>. Make sure you are signed in with your Twitter account. 
+
+Scroll to the bottom of the page. Under `Tools`, click on `Manage Your Apps`.
+
+![manage-apps](img/twitter_manage_apps.png)
+
+## Advanced: Scraping  Tweets (2)
+
+Click `Create New App`:
+
+![create-new](img/new_twitter_app.png)
+
+## Advanced: Scraping  Tweets (3)
+
+Fill in the App details similar to below. Then agree to the Developer Agreement.
+
+![app-details](img/twitter_app_name.png)
+
+## Advanced: Scraping  Tweets (4)
+
+Click on the `Keys and Access Tokens` tab. You should see two long strings of letters and numbers. One called 'Consumer Key (API Key)'. The other called 'Consumer Secret (API Secret)'. 
+
+Load `twitteR` and enter this information into the `setup_twitter_oauth` function. For example:
+
+```{r eval=FALSE}
+library(twitteR)
+
+setup_twitter_oauth("API key", "API secret")
+```
+
+```{r include=FALSE}
+#source('keys/twitter.R')
+```
+
+Note: you should keep your Secret API Key secrete.
+
+## Advanced: Scraping  Tweets (5)
+
+Now that you have your App set up, you can begin downloading tweets. For example, to download about 100 tweets from `@realDonaldTrump` use:
+
+```{r eval=FALSE}
+trump <- userTimeline('realDonaldTrump', n = 100)
+```
+
+## Advanced: Scraping  Tweets (6)
+
+All of the text from these tweets is in the `trump` object. We need to do one small step to extract them into a character vector:
+
+```{r eval=FALSE}
+trump_text = sapply(trump, function(x) x$getText())
+```
+
+## Advanced: Scraping  Tweets (7)
+
+We now convert `trump_text` into a `Corpus` (using `VectorSource` rather than `DirSource`) and preprocess the data as before:
+
+```{r eval=FALSE}
+trump_corpus <- Corpus(VectorSource(trump_text)) %>%
+    tm_map(content_transformer(tolower)) %>%
+    tm_map(stripWhitespace) %>%
+    tm_map(removePunctuation) %>%
+    tm_map(removeNumbers) %>%
+    tm_map(removeWords,
+           stopwords(kind = 'english')) %>%
+    tm_map(stemDocument)
+```
