@@ -1,10 +1,12 @@
-    ---
+---
 title: 'SG1022 Seminar 2: Composite Indicators'
 author: "Christopher Gandrud"
 date: '2016'
 output:
+  ioslides_presentation:
+    css: https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css
+    logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
   pdf_document: default
-  ioslides_presentation: default
 ---
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
@@ -178,9 +180,9 @@ summary(wdi$electricity_use)
 
 ## Look at the data
 
-Always take a look at your data to get a sense of the distribution of missing values. Maybe spot why values are missing.
+Always take a look at your data to get a sense of the distribution of missing values. 
 
-![missing-look](img/look_at_missing.png)
+Why do you think values of the methane emissions variable missing?
 
 ## Recode special values to NA
 
