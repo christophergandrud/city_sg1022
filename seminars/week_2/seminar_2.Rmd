@@ -3,10 +3,10 @@ title: 'SG1022 Seminar 2: Composite Indicators'
 author: "Christopher Gandrud"
 date: '2016'
 output:
+  pdf_document: default
   ioslides_presentation:
     css: https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css
     logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
-  pdf_document: default
 ---
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
@@ -65,7 +65,7 @@ library(googleVis)
 library(ggplot2)
 ```
 
-Remember to **include this code **at the top** of your source code file to ensure that it runs correctly.
+Remember to **include this code at the top** of your source code file to ensure that it runs correctly.
 
 ## Find WDI Indicator ID
 
@@ -84,7 +84,7 @@ Now use the `WDI` function from the WDI package to download the indicator:
 ```{r message=FALSE, cache=TRUE}
 # Download data. Place in new object called methane emissions
 methane <- WDI(indicator = 'EN.ATM.METH.KT.CE', start = 1990,
-           end = 2014)
+                end = 2014)
 
 head(methane)
 ```
@@ -139,9 +139,7 @@ names(wdi)
 
 ## Removing non-countries (1)
 
-All countries have an [ISO 2 Letter Country Code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). These include 2 letters.
-
-`iso2c` codes have patterns that we can use to select specific types of units.
+All countries have an [ISO 2 Letter Country Code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). These include 2 letters. `iso2c` codes have patterns that we can use to select specific types of units:
 
 - Regions (like 'Arab World') have `iso2c` codes that begin or end with a number.
 
@@ -159,7 +157,7 @@ regions <- c(regions, 'EU', 'OE')
 
 wdi <- subset(wdi, !(iso2c %in% regions))
 
-head(wdi)
+head(wdi)[, 'country']
 ```
 
 ## <i class="fa fa-arrow-up"></i> Advanced: Regex
@@ -224,11 +222,11 @@ Once you have analysed the reasons for your missing data, it **may** be reasonab
 For example, maybe it is reasonable to replace `NA` values with the variable `mean`:
 
 ```{r, eval=FALSE}
-# Find mean FDI
+# Find mean methane
 mean_methane <- mean(methane$methane_emissions,
                     na.rm = TRUE)
 
-# Replace NAs with FDI mean
+# Replace NAs with methane mean
 # NOTE: nothing will change because we already dropped the NAs
 methane$methane_emissions[
             is.na(methane$methane_emissions)] <- mean_methane

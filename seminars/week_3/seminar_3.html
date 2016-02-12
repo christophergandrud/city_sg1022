@@ -117,20 +117,20 @@
 <li><p>Getting (local) data into R</p></li>
 <li><p>Working with factors (categorical data)</p></li>
 <li><p>Using R to analyse surveys (cross-tabs, \(X^2\), grouped bar plots)</p></li>
-<li><p>Setting up Qualtrics</p></li>
-<li><p>Critique survey design</p></li>
+<li><p>Setting up Qualtrics for online survey administration</p></li>
 </ul>
 
-</article></slide><slide class=''><hgroup><h2><i class="fa fa-check"></i> Pop Quiz</h2></hgroup><article  id="pop-quiz">
+</article></slide><slide class=''><hgroup><h2><i class="fa fa-check"></i> Pop Quiz: Preparing a survey</h2></hgroup><article  id="pop-quiz-preparing-a-survey">
 
 <ul>
-<li><p>What is the <code>min-max</code> function and why would you use it when creating composite indicators?</p></li>
-<li><p>What is the <code>library</code> function and when do you use it?</p></li>
+<li><p>What is a <strong>pilot</strong> survey? Why are they important?</p></li>
+<li><p>What is <strong>congnitive interviewing</strong>? Why do you use it in survey research?</p></li>
+<li><p>What are <strong>think alouds</strong>? How do they relate to cognitive interviewing?</p></li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2><i class="fa fa-folder-open-o"></i> File paths</h2></hgroup><article  id="file-paths">
 
-<p>Files are organised <strong>hierarchically</strong> into (upside down) trees.</p>
+<p>Once you have gathered your survey data (and almost any type of data), you will store it on a computer in files. Files on a computer are organised <strong>hierarchically</strong> into (upside down) <strong>trees</strong>.</p>
 
 <pre class = 'prettyprint lang-r'>Root
 |_
@@ -139,9 +139,11 @@
         Child1
         Child2</pre>
 
+<p>You will see this week, and especially in the text analysis and reproducible research weeks, that knowing where your files are stored and how to access them is very important for doing computational data research.</p>
+
 </article></slide><slide class=''><hgroup><h2>Example file path</h2></hgroup><article  id="example-file-path">
 
-<p>The file path <code>C:\group_project\data\data_set.csv</code> represents the tree:</p>
+<p>For example, the file path <code>C:\group_project\data\data_set.csv</code> represents the tree:</p>
 
 <pre class = 'prettyprint lang-r'>C
 |_
@@ -151,24 +153,13 @@
         |_
             data_set.csv</pre>
 
-</article></slide><slide class=''><hgroup><h2><i class="fa fa-folder-open-o"></i> Root</h2></hgroup><article  id="root">
+</article></slide><slide class=''><hgroup><h2>Root naming conventions</h2></hgroup><article  id="root-naming-conventions">
 
-<p><strong>Root</strong> directories are the <strong>first level of a disk</strong>.</p>
-
-<p>They are the root out of which the file tree grows.</p>
-
-<p><strong>Root naming conventions</strong>:</p>
-
-<p><strong>Linux/Mac</strong>: <code>/</code></p>
+<p>Unfortunately, how your computer refers to the file tree depends on your operating system:</p>
 
 <ul>
-<li>e.g. <code>/group_project</code> means that the <code>group_project</code> directory is a child of the root directory.</li>
-</ul>
-
-<p><strong>Windows</strong>: the disk is partitioned, e.g. the <code>C</code> partition is denoted <code>C:\</code>.</p>
-
-<ul>
-<li><code>C:\group_project</code> indicates that the <code>group_project</code> directory is a child of the <code>C</code> partition.</li>
+<li><p><strong>Windows</strong>: The &#39;root&#39; of the tree is a partition such as <code>C:\</code>. So, for example, <code>C:\group_project</code> indicates that the <code>group_project</code> directory is a child of the <code>C</code> partition.</p></li>
+<li><p><strong>Mac/Linux</strong>: The &#39;root&#39; of the tree is just denoted with a <code>/</code> with nothing before it. E.g. <code>/group_project</code> means that the <code>group_project</code> directory is a child of the root directory.</p></li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2><i class="fa fa-folder-open-o"></i> Sub (child) directories</h2></hgroup><article  id="sub-child-directories">
@@ -184,60 +175,28 @@ C:\group_project\data</pre>
 <p><i class="fa fa-exclamation"></i> <strong>R tip</strong>:</p>
 
 <ul>
-<li><p>In R for Windows you either use two backslashes <code>\\</code> (<code>\</code> is the R <a href='http://en.wikipedia.org/wiki/Escape_character' title=''>escape character</a>)</p></li>
-<li><p>Or <code>/</code> in <strong>relative paths</strong> in R for Windows, it will know what you mean.</p></li>
+<li><p>In R for windows, use <code>/</code>, it will know what you mean.</p></li>
+<li><p>Or use two backslashes <code>\\</code> (nerd detail: <code>\</code> is the R <a href='http://en.wikipedia.org/wiki/Escape_character' title=''>escape character</a>).</p></li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2><i class="fa fa-folder-open-o"></i> Working directories</h2></hgroup><article  id="working-directories">
 
 <p>A <strong>working directory</strong> is the directory where the program looks for files/other directories.</p>
 
-<p><i class="fa fa-exclamation"></i> <strong>Always remember the working directory.</strong></p>
-
-<ul>
-<li>Otherwise you may open/save files that you do not want to open/save.</li>
-</ul>
+<p><i class="fa fa-exclamation"></i> <strong>Always remember the working directory.</strong> Otherwise you may open/save files that you do not want to open/save.</p>
 
 </article></slide><slide class=''><hgroup><h2><i class="fa fa-folder-open-o"></i> Working directories</h2></hgroup><article  id="working-directories-1">
 
-<p><strong>In R:</strong></p>
+<p>You can find out what your workding directory is with the <code>getwd</code> function. List all of the files in that directory with <code>list.files</code>, and set your working directory with <code>setwd</code>.</p>
 
-<pre class = 'prettyprint lang-r'># Find working directory
-getwd()</pre>
+<pre class = 'prettyprint lang-r'># Find the working directory
+getwd()
 
-<pre >## [1] &quot;/git_repositories/city_sg1022/seminars/week_3&quot;</pre>
+# List all files in the working directory
+list.files()
 
-<pre class = 'prettyprint lang-r'># List all files in the working directory
-list.files()</pre>
-
-<pre >## [1] &quot;ESS5_UKonly.sav&quot; &quot;example_kw.csv&quot;  &quot;seminar_3.html&quot;  &quot;seminar_3.pdf&quot;  
-## [5] &quot;seminar_3.Rmd&quot;</pre>
-
-<pre class = 'prettyprint lang-r'># Set group project as working directory
-setwd(&#39;C:\\group_project&#39;)</pre>
-
-</article></slide><slide class=''><hgroup><h2><i class="fa fa-folder-open-o"></i> Relative vs. Absolute file paths</h2></hgroup><article  id="relative-vs.-absolute-file-paths">
-
-<p>Use <strong>relative file paths</strong> when possible.</p>
-
-<ul>
-<li><strong>Absolute file path</strong>: the entire path on a particular system,
-
-<ul>
-<li>E.g. <code>C:\\group_project/data/data_set.csv</code></li>
-</ul></li>
-<li><p><strong>Relative file path</strong>: the path relative to the working directory.</p>
-
-<ul>
-<li>E.g. if <code>C:\\group_project</code> is the working directory then the relative path for <code>data_set.csv</code> is <code>data/data_set.csv</code>.</li>
-</ul></li>
-</ul>
-
-<p>Why?</p>
-
-<ul>
-<li>Your scripts will run easily on <strong>other computers</strong>. <strong>Enhances reproducibility</strong>. Easier for your collaborators. Easier for you when you use another computer.</li>
-</ul>
+# Set the U drive as your working directory
+setwd(&#39;U:\\&#39;)</pre>
 
 </article></slide><slide class=''><hgroup><h2><i class="fa fa-folder-open-o"></i> File &amp; directory name conventions</h2></hgroup><article  id="file-directory-name-conventions">
 
@@ -256,19 +215,21 @@ setwd(&#39;C:\\group_project&#39;)</pre>
 
 <p>R can load data from many different file formats (e.g. <code>.sav</code> (SPSS), <code>.xlsx</code> (Excel), <code>.dta</code> (Stata), <code>.csv</code>).</p>
 
-<p>The <a href='https://github.com/leeper/rio' title=''>rio</a> (R input/output) package makes it very easy to import many different types of data.</p>
-
-<p>It has two key functions <code>import</code> and <code>export</code>.</p>
+<p>The <a href='https://github.com/leeper/rio' title=''>rio</a> (R input/output) package makes it very easy to import many different types of data. It has two key functions <code>import</code> and <code>export</code>.</p>
 
 <p><strong>Remember:</strong> You will need to <code>install.packages</code> rio and then load it into your workspace with <code>library</code>.</p>
 
 </article></slide><slide class=''><hgroup><h2>Rio <code>import</code> for loading data into R</h2></hgroup><article  id="rio-import-for-loading-data-into-r">
 
-<p><strong>First</strong>, download the <code>ESS5_UKonly.sav</code> data set from Moodle (it&#39;s under Week 3). Create a folder called <code>sg1022_data</code> and place the data file into it.</p>
+<p><strong>First</strong>: create a folder in your <code>U</code> drive called <code>sg1022_data</code>.</p>
 
-<p><strong>Second</strong>, set your working directory to the folder where the data is located. For example, if your data is in <code>C:\\sg1022_data</code> then use:</p>
+<p><strong>Second</strong>: download the <code>ESS5_UKonly.sav</code> data set from Moodle (it&#39;s under Week 3).</p>
 
-<pre class = 'prettyprint lang-r'>setwd(&#39;C:\\sg1022_data/&#39;)</pre>
+<p><strong>Third</strong>, set your working directory to the folder where the data is located:</p>
+
+<pre class = 'prettyprint lang-r'>setwd(&#39;U:\\sg1022_data/&#39;)</pre>
+
+<p><strong>Tip</strong>: If you begin typing the directory name and then hit the <code>TAB</code> key on your keyboard, RStudio will list possible directory names, so you don&#39;t have to type the whole thing.</p>
 
 </article></slide><slide class=''><hgroup><h2>Rio <code>import</code> for loading data into R</h2></hgroup><article  id="rio-import-for-loading-data-into-r-1">
 
@@ -293,7 +254,8 @@ head(ess5_uk[1:3, 1:6])</pre>
 
 <p>We can save the <code>ess5_uk</code> data into another format. For example, .csv &quot;Comma Separated Values&quot;. Just add the csv file extension to the file name and <code>rio</code> does the rest.</p>
 
-<pre class = 'prettyprint lang-r'>export(ess5_uk, &#39;ess5_uk.csv&#39;)</pre>
+<pre class = 'prettyprint lang-r'># Save file in current working directory
+export(ess5_uk, file = &#39;ess5_uk.csv&#39;)</pre>
 
 </article></slide><slide class=''><hgroup><h2>Review: factors (categorical data)</h2></hgroup><article  id="review-factors-categorical-data">
 
@@ -502,12 +464,11 @@ support_perc</pre>
 
 <p>Based on this test: is there a statistically significant association between income level and support for Kanye West and Wiz Khalifa?</p>
 
-</article></slide><slide class=''><hgroup><h2><i class="fa fa-arrow-circle-o-up"></i> Seminar: Work with example survey data</h2></hgroup><article  id="seminar-work-with-example-survey-data">
+</article></slide><slide class=''><hgroup><h2><i class="fa fa-arrow-circle-o-up"></i> Work with example survey data</h2></hgroup><article  id="work-with-example-survey-data">
 
-<ol>
-<li><p>Set up a Qualtrics Survey using <em>Worksheet: introduction to Qualtrics</em> on Moodle under <em>Qualtrics Resources</em>.</p></li>
-<li><p>With a partner complete the survey design worksheet.</p></li>
-</ol>
+<p>Now, set up a Qualtrics Survey using <em>Worksheet: introduction to Qualtrics</em> on Moodle under <em>Qualtrics Resources</em>.</p>
+
+<p>You can use Qualtrics to administer a survey via the internet. This may be helpful for your group project if you choose to use surveys as your data pathway.</p>
 
 </article></slide><slide class=''><hgroup><h2> <i class="fa fa-arrow-up"></i> Extras: reorder factors</h2></hgroup><article  id="extras-reorder-factors">
 

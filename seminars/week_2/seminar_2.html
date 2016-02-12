@@ -160,7 +160,7 @@ library(corrplot)
 library(googleVis)
 library(ggplot2)</pre>
 
-<p>Remember to <strong>include this code </strong>at the top** of your source code file to ensure that it runs correctly.</p>
+<p>Remember to <strong>include this code at the top</strong> of your source code file to ensure that it runs correctly.</p>
 
 </article></slide><slide class=''><hgroup><h2>Find WDI Indicator ID</h2></hgroup><article  id="find-wdi-indicator-id">
 
@@ -178,7 +178,7 @@ library(ggplot2)</pre>
 
 <pre class = 'prettyprint lang-r'># Download data. Place in new object called methane emissions
 methane &lt;- WDI(indicator = &#39;EN.ATM.METH.KT.CE&#39;, start = 1990,
-           end = 2014)
+                end = 2014)
 
 head(methane)</pre>
 
@@ -246,9 +246,7 @@ names(wdi)</pre>
 
 </article></slide><slide class=''><hgroup><h2>Removing non-countries (1)</h2></hgroup><article  id="removing-non-countries-1">
 
-<p>All countries have an <a href='https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2' title=''>ISO 2 Letter Country Code</a>. These include 2 letters.</p>
-
-<p><code>iso2c</code> codes have patterns that we can use to select specific types of units.</p>
+<p>All countries have an <a href='https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2' title=''>ISO 2 Letter Country Code</a>. These include 2 letters. <code>iso2c</code> codes have patterns that we can use to select specific types of units:</p>
 
 <ul>
 <li><p>Regions (like &#39;Arab World&#39;) have <code>iso2c</code> codes that begin or end with a number.</p></li>
@@ -265,22 +263,9 @@ regions &lt;- c(regions, &#39;EU&#39;, &#39;OE&#39;)
 
 wdi &lt;- subset(wdi, !(iso2c %in% regions))
 
-head(wdi)</pre>
+head(wdi)[, &#39;country&#39;]</pre>
 
-<pre >##     iso2c country year methane_emissions electricity_use co2_emissions
-## 126    AD Andorra 1990                NA              NA            NA
-## 127    AD Andorra 1991                NA              NA            NA
-## 128    AD Andorra 1992                NA              NA            NA
-## 129    AD Andorra 1993                NA              NA            NA
-## 130    AD Andorra 1994                NA              NA            NA
-## 131    AD Andorra 1995                NA              NA      6.374495
-##     population_growth alternative_energy
-## 126          3.856125                 NA
-## 127          3.891304                 NA
-## 128          3.859345                 NA
-## 129          3.501404                 NA
-## 130          2.755004                 NA
-## 131          1.812614                 NA</pre>
+<pre >## [1] &quot;Andorra&quot; &quot;Andorra&quot; &quot;Andorra&quot; &quot;Andorra&quot; &quot;Andorra&quot; &quot;Andorra&quot;</pre>
 
 </article></slide><slide class=''><hgroup><h2><i class="fa fa-arrow-up"></i> Advanced: Regex</h2></hgroup><article  id="advanced-regex">
 
