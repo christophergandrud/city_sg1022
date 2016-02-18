@@ -261,9 +261,11 @@ A lot of these tools would be great to use in your group project. Please see me 
 
 ## Your turn (1)
 
-Preprocess the corpus a number of different ways (for example, don't convert all letters to lower case).
+Re-preprocess our corpus in different ways (for example, don't convert all letters to lower case).
 
-How does the word cloud change?
+- How does the word cloud change? 
+
+- How do the conclusions you draw change?
 
 ## Your turn (2)
 
