@@ -3,10 +3,10 @@ title: 'SG1022 Seminar 4: Text analysis'
 author: "Christopher Gandrud"
 date: '2016'
 output:
+  pdf_document: default
   ioslides_presentation:
     css: https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css
     logo: https://raw.githubusercontent.com/christophergandrud/Hertie_Collab_Data_Science/master/img/HertieCollaborativeDataLogo_v1.png
-  pdf_document: default
 ---
 
 ## <i class="fa fa-arrow-circle-o-up"></i> Objectives
@@ -269,7 +269,7 @@ How does the word cloud change?
 
 Now it is your turn. With a partner: 
 
-- **Think of a corpus** of texts that you want to analyse (e.g. newspaper articles, treaties, speeches, press releases).
+- **Think of a corpus** of texts that you want to analyse (e.g. newspaper articles, treaties, speeches, press releases). If you want to, see the instructions for scraping tweets below
 
 - **Gather** a small sample of these texts. Save them as text files in a new directory.
 
@@ -279,7 +279,7 @@ Now it is your turn. With a partner:
 
 - What are the the **commonly discussed topics** in this corpus?
 
-- Validate your finding, by reading a few of the texts. Do your conclusions about the main topics from the wordclouds match your conclusions when you read the whole document? If not, why not?
+- **Validate** your finding, by reading a few of the texts. Do your conclusions about the main topics from the wordclouds match your conclusions when you read the whole document? If not, why not?
 
 ## Advanced: Scraping  Tweets (1)
 

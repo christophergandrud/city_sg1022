@@ -17,16 +17,19 @@ output:
 
 - Using R to analyse surveys (cross-tabs, $X^2$, grouped bar plots)
 
-- Setting up Qualtrics for online survey administration
+- On you're own: Setting up Qualtrics for online survey administration
 
 ## <i class="fa fa-check"></i> Pop Quiz: Preparing a survey
 
+- What is a **survey mode**? Given an example of how the survey mode may affect your results.
+
+- What is a **sampling frame**? How do you choose one?
+
 - What is a **pilot** survey? Why are they important?
 
-- What is **congnitive interviewing**? Why do you use it in survey research?
+- What is **item non-response**?
 
-- What are **think alouds**? How do they relate to cognitive interviewing?
-
+- What is **acquiescence** and why might it be a problem in your survey?
 
 ## <i class="fa fa-folder-open-o"></i> File paths
 
@@ -94,7 +97,7 @@ directories.
 
 ## <i class="fa fa-folder-open-o"></i> Working directories
 
-You can find out what your workding directory is with the `getwd` function. List all of the files in that directory with `list.files`, and set your working directory with `setwd`.
+You can find out what your working directory is with the `getwd` function. List all of the files in that directory with `list.files`, and set your working directory with `setwd`.
 
 ```{r, eval=FALSE}
 # Find the working directory
@@ -126,7 +129,22 @@ R can load data from many different file formats (e.g. `.sav` (SPSS), `.xlsx` (E
 
 The [rio](https://github.com/leeper/rio) (R input/output) package makes it very easy to import many different types of data. It has two key functions `import` and `export`.
 
-**Remember:** You will need to `install.packages` rio and then load it into your workspace with `library`.
+## Install rio
+
+**Remember:** You need to `install.packages` rio and then load it into your workspace with `library`.
+
+In your **console**:
+
+```{r eval=FALSE}
+install.packages('rio')
+```
+
+In **a new R source code file**:
+
+```{r}
+library(rio)
+```
+
 
 ## Rio `import` for loading data into R
 
@@ -185,10 +203,10 @@ In R, categorical data is coded using **factors**.
 
 Let's load a simple data set into R for this example: `example_kw.csv`. 
 
-This file is located on Moodle (Week 3) . Download it and place it into your `sg1022_data` directory. Now load it into a new object called `example`.
+This file is located on Moodle (Week 3). Download it and place it into your `sg1022_data` directory. Now load it into a new object called `kanye_survey`.
 
 ```{r message=FALSE}
-example <- import('example_kw.csv')
+kanye_survey <- import('example_kw.csv')
 ```
 
 ## Review: factors (categorical data)
@@ -210,11 +228,11 @@ To convert this variable to a factor and add labels use the `factor` function.
 income_labels <- c('Low income', 'Medium income', 'High income')
 
 # Convert income to factor and apply labels
-example$income <- factor(example$income, 
+kanye_survey$income <- factor(kanye_survey$income, 
                                labels = income_labels)
 
 # Create simple frequency table
-summary(example$income)
+summary(kanye_survey$income)
 ```
 
 ## Converting from character strings to factors (1)
@@ -222,7 +240,7 @@ summary(example$income)
 Sometimes you have data that is in character strings (R sees letters, but doesn't see any categories), but you want it to be a factor. For example:
 
 ```{r}
-summary(example$kanye_or_wiz)
+summary(kanye_survey$kanye_or_wiz)
 ```
 
 ## Converting from character strings to factors (2)
@@ -230,9 +248,9 @@ summary(example$kanye_or_wiz)
 Simply run it through `as.factor`. R will turn it into a factor and use the character strings as factor labels.
 
 ```{r}
-example$kanye_or_wiz <- as.factor(example$kanye_or_wiz)
+kanye_survey$kanye_or_wiz <- as.factor(kanye_survey$kanye_or_wiz)
 
-summary(example$kanye_or_wiz)
+summary(kanye_survey$kanye_or_wiz)
 ```
 
 ## Frequency table (categorical variables)
@@ -240,7 +258,7 @@ summary(example$kanye_or_wiz)
 Remember, use `summary` to create a basic frequency table of a factor variable in R.
 
 ```{r, message=FALSE}
-income_freq <- summary(example$income)
+income_freq <- summary(kanye_survey$income)
 income_freq
 ```
 
@@ -257,7 +275,7 @@ income_prop
 Show the frequencies more effectively with a barplot. To create a barplot of a single factor variable just use `plot`:
 
 ```{r}
-plot(example$income, main = 'Income Level')
+plot(kanye_survey$income, main = 'Income Level')
 ```
 
 ## Barplot (proportions)
@@ -273,7 +291,7 @@ barplot(income_prop, main = 'Income Level', ylab = 'Proportion')
 Use `table` to create a simple contingency table:
 
 ```{r}
-support <- table(example$kanye_or_wiz, example$income)
+support <- table(kanye_survey$kanye_or_wiz, kanye_survey$income)
 support
 ```
 
@@ -349,12 +367,14 @@ chisq.test(support)
 
 Based on this test: is there a statistically significant association between income level and support for Kanye West and Wiz Khalifa?
 
-## <i class="fa fa-arrow-circle-o-up"></i> Work with example survey data
+## <i class="fa fa-arrow-circle-o-up"></i> Set up and run Qualtrics survey
 
 Now, set up a Qualtrics Survey using *Worksheet: introduction to Qualtrics* on 
 Moodle under *Qualtrics Resources*.
 
 You can use Qualtrics to administer a survey via the internet. This may be helpful for your group project if you choose to use surveys as your data pathway.
+
+Set up a simple (no more than 3 or 4 questions) Qualtrics survey, administer it to 3 classmates, download and load the results into R.
 
 
 ## <i class="fa fa-arrow-up"></i> Extras: reorder factors
