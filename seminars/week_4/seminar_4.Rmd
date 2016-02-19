@@ -55,19 +55,21 @@ To do this we might gather a corpus of press releases from the German Chancellor
 
 **Note:** The most efficient way to gather text data from the internet is with *automated web scraping*. 
 
-We mostly not cover this tool in this class. Instead we will hand download the texts. This is *laborious* so if you are interested in web scraping see me for more details.
+We mostly do not cover this tool in this class. Instead we will hand download the texts. This is *laborious* so if you are interested in web scraping see me for more details.
 
 That being said: at the bottom of this seminar sheet, there are instructions for how to scrape tweets. Take a look if you are interested.
 
 ## <i class="fa fa-download"></i> Directory set up: 
 
-First create the folders that you will save the data into. We want to create one common directory called `press_releases`. Then create two sub-folders: `refugees_pre` and `refugees_post`. Your file tree should look like this:
+First create the folders that you will save the data into. We want to create one common directory called `press_releases`. Then create two sub-folders: `refugees_pre` and `refugees_post`. On a City University computer, your file tree should look like this:
 
 ```{r eval=F}
-press_releases
+U
 |_
-    refugees_pre
-    refugees_post
+    press_releases
+    |_
+        refugees_pre
+        refugees_post
 ```
 
 ## <i class="fa fa-download"></i> Copy-paste (1)
@@ -76,7 +78,7 @@ Now go to the following website, copy the speech text, and paste the text into a
 
 - <http://www.bundeskanzlerin.de/Content/EN/Artikel/2015/09_en/2015-09-09-generaldebatte-merkel_en.html>
 
-**Note**: To create a new text file in RStudio Click `New File > Text File`.
+**Note**: To create a new text file in RStudio Click `New File > Text File`. Also, *never use Microsoft Word* to work with text files. MS Word will secretly insert data that is not our text and hamper our analysis.
 
 It is important to give the **files meaningful names**. Here we gave a title based on the subject and date. This will help you identify them later.
 
@@ -96,7 +98,7 @@ See Week 3's seminar for how to set the working directory.
 
 ## Load the texts into R. 
 
-We will use the `tm` (text mining) package to load the data and pre-process it. To load the data use the `Corpus` function. We need to do this twice, once for the press releases before the Cologne Attacks and once for the press releases after:
+We will use the `tm` (text mining) package to load the data and preprocess it. To load the data use the `Corpus` function. We need to do this twice, once for the press releases before the Cologne Attacks and once for the press releases after:
 
 ```{r, message=FALSE}
 library(tm)
@@ -144,11 +146,11 @@ To convert all letters to lower case use:
 pre <- tm_map(pre, content_transformer(tolower))
 ```
 
-In the **Environment** pane, checkout the pre object to make sure that this worked as intended. Do this for all preprocessing steps.
+In the **Environment** pane, checkout the `pre` object to make sure that this worked as intended. Do this for all preprocessing steps.
 
 ## Remove extra white space
 
-Some times there are extra spaces between words (you only need one). To remove these use:
+Sometimes there are extra spaces between words (you only need one). To remove these use:
 
 ```{r}
 pre <- tm_map(pre, stripWhitespace)
@@ -190,15 +192,15 @@ pre <- tm_map(pre, stemDocument)
 
 ## Remove corpus specific words
 
-There may also be other words that are specific to the corpus that we also want to remove. Maybe because these are commonly used words in the Corpus that do not provide meaning for our research question. For example, we know that all of the texts are related to the German Chancellor (Angela Merkel) and they are in some way about Germany.
+There may also be words that are specific to the corpus that we want to remove. Maybe because these are commonly used words in the corpus that do not provide meaning for our research question. 
 
-We can effectively create a custom stopword list and remove these words as well:
+For example, we know that all of the texts are related to the German Chancellor (Angela Merkel). We can create a custom stopword list and remove these words as well:
 
 ```{r}
 pre <- tm_map(pre, removeWords, words = c('angela', 'merkel'))
 ```
 
-Note we do this **after stemming** to reduce the number of variations of the words to explicitly include in our custom stopword list (e.g. only `merkel`, rather than also `merkels`, etc.)
+Note we do this **after stemming** to reduce the number of variations of the words we need to explicitly include in our custom stopword list (e.g. only `merkel`, rather than also `merkels`, etc.)
 
 ## Preprocessing all together
 
@@ -219,35 +221,41 @@ post <- Corpus(DirSource('refugees_post/')) %>%
             words = c('angela', 'merkel'))
 ```
 
-## Wordclouds (1)
+## Wordclouds
 
-Now that you have your preprocessed word cloud, you can begin exploring it. First, lets make a **wordcloud** with the `wordcloud` function from the wordcloud package.
+Now that you have your preprocessed corpus, you can begin exploring it. Lets make a **wordcloud** with the `wordcloud` function from the wordcloud package.
 
 ```{r, message=FALSE}
 library(wordcloud)
 ```
 
-The size of the words gives us a sense of their **relative frequency** in the corpus. Note the wordclouds do not show all of the words, just more common ones.
+The size of the words in the wordcloud give us a sense of their **relative frequency** in the corpus. Note the wordclouds do not show all of the words, just more common ones.
 
-## Wordclouds (2)
+Create a wordcloud for the pre-incident corpus:
 
 ```{r, message=FALSE, warning=FALSE}
 wordcloud(pre)
 ```
 
-## Wordclouds (3)
+Now create a word cloud for the post-incident corpus:
 
 ```{r, message=FALSE, warning=FALSE}
 wordcloud(post)
 ```
 
-## Wordclouds (4)
-
-Add colours with the `color` argument:
+You can add colours that further highlight the words' frequency with the `color` argument:
 
 ```{r, message=FALSE, warning=FALSE}
 wordcloud(post, color = brewer.pal(6, "Dark2"))
 ```
+
+## The importance of preprocessing
+
+Re-preprocess the corpi in different ways (for example, don't convert all letters to lower case).
+
+- How does the word cloud change? 
+
+- How do the conclusions you draw change?
 
 ## Full source
 
@@ -259,17 +267,15 @@ For more advanced analysis techniques, see: <https://rstudio-pubs-static.s3.amaz
 
 A lot of these tools would be great to use in your group project. Please see me if you have questions.
 
-## Your turn (1)
+## Create/analyse a mini-corpus
 
-Re-preprocess our corpus in different ways (for example, don't convert all letters to lower case).
+Now it is time for you to gather your own texts, preprocess them, and do some basic analysis. Choose **one** of the following two options:
 
-- How does the word cloud change? 
+1. Gather **by hand** -> Go to **On Your Own Instructions A**
 
-- How do the conclusions you draw change?
+2. Gather tweets using `twitteR` -> Go to **On Your Own Instructions B**. Note, you will need a Twitter account to do this.
 
-## Your turn (2)
-
-Now it is your turn. With a partner: 
+## On Your Own Instructions A
 
 - **Think of a corpus** of texts that you want to analyse (e.g. newspaper articles, treaties, speeches, press releases). If you want to, see the instructions for scraping tweets below
 
@@ -283,9 +289,9 @@ Now it is your turn. With a partner:
 
 - **Validate** your finding, by reading a few of the texts. Do your conclusions about the main topics from the wordclouds match your conclusions when you read the whole document? If not, why not?
 
-## Advanced: Scraping  Tweets (1)
+## On Your Own Instructions B (1)
 
-We can use the twitteR package to scrape Twitter. **Note:** to do this you need a Twitter account.
+We can use the twitteR package to scrape Twitter. **Reminder:** to do this you need a Twitter account.
 
 First you need to get authenticated. Go to: <https://dev.twitter.com/>. Make sure you are signed in with your Twitter account. 
 
@@ -293,19 +299,19 @@ Scroll to the bottom of the page. Under `Tools`, click on `Manage Your Apps`.
 
 ![manage-apps](img/twitter_manage_apps.png)
 
-## Advanced: Scraping  Tweets (2)
+## On Your Own Instructions B (2)
 
 Click `Create New App`:
 
 ![create-new](img/new_twitter_app.png)
 
-## Advanced: Scraping  Tweets (3)
+## On Your Own Instructions B (3)
 
 Fill in the App details similar to below. Then agree to the Developer Agreement.
 
 ![app-details](img/twitter_app_name.png)
 
-## Advanced: Scraping  Tweets (4)
+## On Your Own Instructions B (4)
 
 Click on the `Keys and Access Tokens` tab. You should see two long strings of letters and numbers. One called 'Consumer Key (API Key)'. The other called 'Consumer Secret (API Secret)'. 
 
@@ -323,7 +329,7 @@ setup_twitter_oauth("API key", "API secret")
 
 Note: you should keep your Secret API Key secrete.
 
-## Advanced: Scraping  Tweets (5)
+## On Your Own Instructions B (5)
 
 Now that you have your App set up, you can begin downloading tweets. For example, to download about 100 tweets from `@realDonaldTrump` use:
 
@@ -331,7 +337,7 @@ Now that you have your App set up, you can begin downloading tweets. For example
 trump <- userTimeline('realDonaldTrump', n = 100)
 ```
 
-## Advanced: Scraping  Tweets (6)
+## On Your Own Instructions B (6)
 
 All of the text from these tweets is in the `trump` object. We need to do one small step to extract them into a character vector:
 
@@ -339,7 +345,7 @@ All of the text from these tweets is in the `trump` object. We need to do one sm
 trump_text = sapply(trump, function(x) x$getText())
 ```
 
-## Advanced: Scraping  Tweets (7)
+## On Your Own Instructions B (7)
 
 We now convert `trump_text` into a `Corpus` (using `VectorSource` rather than `DirSource`) and preprocess the data as before:
 
@@ -353,3 +359,9 @@ trump_corpus <- Corpus(VectorSource(trump_text)) %>%
            stopwords(kind = 'english')) %>%
     tm_map(stemDocument)
 ```
+
+Create a wordcloud of this corpus and draw conclusions about the key discussed.
+
+## On Your Own Instructions B (8)
+
+Now **you** download tweets from other Twitter users, process the texts, and draw conclusions about the topics they discuss.
