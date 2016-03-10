@@ -12,6 +12,8 @@
 \usepackage{listings}
 \lstset{language=R}
 
+\usepackage[utf8]{vietnam}
+
 \usepackage{color}
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -238,7 +240,7 @@
 
 \end{frame}
 
-\begin{frame}{Examples: World Values Survey}
+\begin{frame}{Example: World Values Survey}
 
     \textbf{Background:} the World Values Survey is a large, repeated cross-national survey of political and social values.
 
@@ -254,12 +256,93 @@
 
     \begin{center}
         {\large{Why did support for military rule decline so much in Albania, Iran and Vietnam in only a few years?}}
+
+        \vspace{1cm}
+    \end{center}
+
+    Inglehart and Welzel (2005) argue that: ``If younger generations are socialized under significantly different conditions from those that shaped earlier generations, the values of the entire society will gradually change through intergenerational replacement.''
+
+\end{frame}
+
+\begin{frame}{More likely\ldots}
+
+    \href{https://www.washingtonpost.com/news/monkey-cage/wp/2014/09/02/world-values-lost-in-translation/}{Kurzman (2014)} argues that it is more likely that the \textbf{question translation changed}.
+{\small{
+    \begin{table}
+        \begin{tabular}{l p{3.5cm} p{3.5cm}}
+        \hline
+        & 1999-2005 & 2006-2009\\
+        \hline\hline
+        English & Having the military rule & Having the military rule \\
+
+        Vietnamese & Vai tr\`{o} c\`{u}a qu\^{a}n đội (\textbf{role of the military}) & [Unavailable] \\
+
+        Albanian & T\"{e} kesh rregulla t\"{e} ushtris\"{e} (\textbf{having military rules}) & T\"{e} kesh regjim ushtarak (\textbf{having a military regime}) \\
+
+        Indonesia & Memiliki peraturan yang jelas tentang angkatan bersenjata (\textbf{having clear military rules}) & Memiliki peraturan tentang angkatan bersenjata (\textbf{having military rules})\\
+
+        \hline
+        \end{tabular}
+    \end{table}
+
+}}
+
+\end{frame}
+
+\begin{frame}
+
+    \begin{center}
+        \textbf{Reproducible research} practices--questionnaire and translation was available--\textbf{made it possible to find} these changes.
     \end{center}
 
 \end{frame}
 
+\begin{frame}{Example: Reinhart and Rogoff (2010)}
+
+    \textbf{Background:} Reinhart and Rogoff (2010) in a highly influential study (in academics and government) found a threshold effect at 90\% Public debt/GDP and Economic Growth.
+
+    \textbf{Original finding:}
+
+    \begin{figure}
+        \includegraphics[scale=0.3]{img/rr_original.png}
+    \end{figure}
 
 
+\end{frame}
+
+\begin{frame}
+
+    \textbf{Replication:} But, Herndon et al. (2014) found that an \alert{Excel coding error} had dropped Australia, Austria, Belgium, Canada, and Denmark.
+
+    \textbf{Corrected finding:}
+
+    \begin{figure}
+        \includegraphics[scale=0.3]{img/rr_corrected.png}
+    \end{figure}
+
+\end{frame}
+
+\begin{frame}{Example: LaCour Affair}
+
+    \textbf{Background:} Lacour and Green (2014) found that having a conversation with a gay person had a very strong positive long-term effect on support for same-sex for marriage. This was \textbf{widely reported} in the popular press and advocacy groups began to use similar techniques. 
+
+    \textbf{Original finding:}
+
+    \begin{figure}
+        \includegraphics[scale=0.23]{img/lacour_original.png}
+    \end{figure}
+
+\end{frame}
+
+\begin{frame}
+
+     Broockman et al. (2015) found that LaCour had \textbf{fabricated} the survey data. (Tech details: he took someone else's survey data and added random noise to the subsequent survey ``waves''.)
+
+     \begin{figure}
+         \includegraphics[scale=0.3]{img/lacour_noise.png}
+     \end{figure}
+
+\end{frame}
 
 \section{How to do really reproducible research}
 
