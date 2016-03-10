@@ -41,7 +41,7 @@
   showstringspaces=false,          % underline spaces within strings only
   showtabs=false,                  % show tabs within strings adding particular underscores
   stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
-  stringstyle=\color{mymauve},     % string literal style
+  stringstyle=\color{orange},     % string literal style
   tabsize=2,	                   % sets default tabsize to 2 spaces
   title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
@@ -112,22 +112,13 @@
 
 \begin{frame}{Are they research?}
 
-    \begin{alertblock}{No}
-        Papers, articles, slideshows, talks, books are the {\large{\textbf{advertising, not the research}}}.
-    \end{alertblock}
-
-\end{frame}
-
-
-\begin{frame}{Are they research?}
-
 
     Papers, articles, slideshows, talks, books are the {\large{\textbf{advertising, not the research}}}.
 
     \vspace{1cm}
 
     \begin{block}{What are they?}
-        \textbf{Presentation documents} \emph{announce} select findings and \emph{tries to convince} us that they are correct (Mesirov 2010).
+        \textbf{Presentation documents} \emph{announcing} select findings and \emph{trying} to convince us that they are correct (Mesirov 2010).
     \end{block}
 \end{frame}
 
@@ -321,11 +312,74 @@
         \hline\hline
         English & Having the military rule & Having the military rule \\
 
-        Vietnamese & Vai tr\`{o} c\`{u}a qu\^{a}n đội (\textbf{role of the military}) & [Unavailable] \\
+        \hline
+        \end{tabular}
+    \end{table}
+
+}}
+
+\end{frame}
+
+\begin{frame}{More likely\ldots}
+
+    \href{https://www.washingtonpost.com/news/monkey-cage/wp/2014/09/02/world-values-lost-in-translation/}{Kurzman (2014)} argues that it is more likely that the \textbf{question translation changed}.
+{\small{
+    \begin{table}
+        \begin{tabular}{l p{3.5cm} p{3.5cm}}
+        \hline
+        & 1999-2005 & 2006-2009\\
+        \hline\hline
+        English & Having the military rule & Having the military rule \\
+
+        Indonesia & Memiliki peraturan yang jelas tentang angkatan bersenjata (\textbf{having clear military rules}) & Memiliki peraturan tentang angkatan bersenjata (\textbf{having military rules})\\
+
+        \hline
+        \end{tabular}
+    \end{table}
+
+}}
+
+\end{frame}
+
+\begin{frame}{More likely\ldots}
+
+    \href{https://www.washingtonpost.com/news/monkey-cage/wp/2014/09/02/world-values-lost-in-translation/}{Kurzman (2014)} argues that it is more likely that the \textbf{question translation changed}.
+{\small{
+    \begin{table}
+        \begin{tabular}{l p{3.5cm} p{3.5cm}}
+        \hline
+        & 1999-2005 & 2006-2009\\
+        \hline\hline
+        English & Having the military rule & Having the military rule \\
+
+        Indonesia & Memiliki peraturan yang jelas tentang angkatan bersenjata (\textbf{having clear military rules}) & Memiliki peraturan tentang angkatan bersenjata (\textbf{having military rules})\\
 
         Albanian & T\"{e} kesh rregulla t\"{e} ushtris\"{e} (\textbf{having military rules}) & T\"{e} kesh regjim ushtarak (\textbf{having a military regime}) \\
 
+        \hline
+        \end{tabular}
+    \end{table}
+
+}}
+
+\end{frame}
+
+\begin{frame}{More likely\ldots}
+
+    \href{https://www.washingtonpost.com/news/monkey-cage/wp/2014/09/02/world-values-lost-in-translation/}{Kurzman (2014)} argues that it is more likely that the \textbf{question translation changed}.
+{\small{
+    \begin{table}
+        \begin{tabular}{l p{3.5cm} p{3.5cm}}
+        \hline
+        & 1999-2005 & 2006-2009\\
+        \hline\hline
+        English & Having the military rule & Having the military rule \\
+
         Indonesia & Memiliki peraturan yang jelas tentang angkatan bersenjata (\textbf{having clear military rules}) & Memiliki peraturan tentang angkatan bersenjata (\textbf{having military rules})\\
+
+        Albanian & T\"{e} kesh rregulla t\"{e} ushtris\"{e} (\textbf{having military rules}) & T\"{e} kesh regjim ushtarak (\textbf{having a military regime}) \\
+
+        Vietnamese & Vai tr\`{o} c\`{u}a qu\^{a}n đội (\textbf{role of the military}) & [Unavailable] \\
 
         \hline
         \end{tabular}
@@ -338,7 +392,7 @@
 \begin{frame}
 
     \begin{center}
-        \textbf{Reproducible research} practices--questionnaire and translation was available--\textbf{made it possible to find} these changes.
+        \textbf{Reproducible research} practices--questionnaire and translation was available--\textbf{made it possible to find} these errors.
     \end{center}
 
 \end{frame}
@@ -395,7 +449,7 @@
     Reproducible research also benefits science by:
 
     \begin{itemize}
-        \item \textbf{Avoiding scientists wasting time} trying to understand a phenomenon that does not exist.
+        \item \textbf{Avoiding scientists wasting time} trying to understand things that does not exist.
 
         \vspace{0.5cm}
 
@@ -462,9 +516,9 @@ library(WDI)
 library(dplyr)
 library(ggplot2)
 setwd('U:\\research/group_project')
-women<-WDI(indicator='SG.GEN.PARL.ZS',start=1995)%>%
-rename(women_in_parl=SG.GEN.PARL.ZS)%>%
-filter(country%in%c('Algeria','Germany','Japan','Sweden'))
+women<-WDI(indicator='SG.GEN.PARL.ZS',start=1995)
+women<-rename(women_in_parl=SG.GEN.PARL.ZS)
+women<-filter(women,country%in%c('Algeria','Germany','Japan','Sweden'))
 ggplot(women,aes(x=year,y=women_in_parl,colour=country))+
 geom_line()+ylab('WomeninParliament(%)')+xlab('')+theme_bw()
 \end{lstlisting}
@@ -479,26 +533,201 @@ geom_line()+ylab('WomeninParliament(%)')+xlab('')+theme_bw()
 
 \end{frame}
 
+\begin{frame}{Human-readable}
+
+    Even files that you intend a computer to run should be \textbf{human-readable}.
+
+    \vspace{1.5cm}
+
+    So that another person (and yourself in the future) can \textbf{understand} what you did, even if the computer program no longer exists (helps \textbf{future-proof} your work).
+
+    \vspace{0.5cm}
+
+    So \ldots
+
+\end{frame}
+
+\begin{frame}{Formatting and Comment characters}
+
+    Write your source code with the \textbf{intention} that it will be read by a person.
+
+    \begin{itemize}
+        \item Use a \textbf{consistent style} (just as you would in a presentation document).
+
+        \item Use \alert{comment characters} that allow you to write information that humans can read and the computer will ignore.
+
+            \begin{itemize}
+                \item R comment character: \texttt{\#}
+                \item SPSS comment character: \texttt{*}
+            \end{itemize}
+    \end{itemize}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Minimal (human-readable) R Example (1)}
+
+\begin{lstlisting}
+#########################
+# Gather women in parliament data from WDI and plot subset
+# Christopher Gandrud
+#########################
+
+# Load required packages
+library(WDI)
+library(dplyr)
+library(ggplot2)
+
+# Set working directory. Changed as needed
+setwd('U:\\research/group_project')
+
+# Download women in parliament data from
+# World Bank Development indicators
+# from 1995. Indicator ID = SG.GEN.PARL.ZS
+women <- WDI(indicator = 'SG.GEN.PARL.ZS', start = 1995)
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]{Minimal (human readable) R Example (2)}
+
+\begin{lstlisting}
+# Clean up: (1) rename women in parliament indicator,
+# (2) select data from Algeria, Germany, Japan, and Sweden
+women <- rename(women, women_in_parl = SG.GEN.PARL.ZS)
+women <- filter(women, country %in%
+                c('Algeria', 'Germany', 'Japan', 'Sweden'))
+
+# Create a comparative line plot of the data
+ggplot(women, aes(x = year, y = women_in_parl, colour = country)) +
+geom_line() +
+ylab('Women in Parliament (%)') + xlab('') +
+theme_bw()
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Minimal SPSS Example}
+
+\begin{lstlisting}
+* Load data from 'employee data.sav' file in the C drive.
+GET FILE='C:\program files\spss\employee data.sav'.
+
+* Find frequencies of jobcat variable and order
+FREQUENCIES
+    VARIABLES=jobcat
+    ORDER=ANALYSIS.
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Organise your files into an understandable hierarchy}
+
+    Start your research with a plan to to organise, store, and make your files available.
+
+    \begin{figure}
+        \includegraphics[scale=0.3]{img/file_tree.png}
+    \end{figure}
+
+{\tiny{Gandrud (2015)}}
+
+\end{frame}
+
+\begin{frame}{File ties}
+
+    Your files should be \textbf{tied} together in a \textbf{documented} and \textbf{understandable} way, so that others (and your future) self will understand your research process.
+
+\end{frame}
+
 \begin{frame}
 
-    \includegraphics[scale=0.3]{img/workflow.png}
-
+    \begin{figure}
+        \includegraphics[scale=0.35]{img/workflow.png}
+    \end{figure}
 {\tiny{Gandrud (2015, 21)}}
+
+
+Note, we don't cover all of the tools to do all of this in this course.
 \end{frame}
 
 
+\begin{frame}[fragile]{Minimal R Example}
 
-\begin{frame}[fragile]{Metropolis}
+\begin{lstlisting}
+#########################
+# Gather women in parliament data from WDI and save locally
+# Christopher Gandrud
+#########################
 
+# Load required packages
+library(WDI)
+library(dplyr)
+library(rio)
 
-    \begin{lstlisting}
-    # A comment
-    library(dplyr)
-    test <- mean(x, na.rm = T)
-    \end{lstlisting}
+# Set working directory. Changed as needed
+setwd('U:\\research/group_project')
 
+# Download women in parliament data from
+# World Bank Development indicators
+# from 1995. Indicator ID = SG.GEN.PARL.ZS
+women <- WDI(indicator = 'SG.GEN.PARL.ZS', start = 1995)
+
+# Save data in CSV format
+export(women, file = 'data/women_in_parl_wdi.csv')
+\end{lstlisting}
 
 \end{frame}
+
+
+\begin{frame}{The reproducible research ideal}
+
+    Ideally, data gathering, analysis, and presentation can be \textbf{dynamically} linked.
+
+    \vspace{1cm}
+
+    We don't cover these tools in this class, but FYI, they go by names such as RMarkdown and Sweave.
+
+\end{frame}
+
+\begin{frame}{This \ldots}
+
+    \begin{figure}
+            \includegraphics[scale=0.3]{img/rmarkdown_source.png}
+    \end{figure}
+
+\end{frame}
+
+\begin{frame}{Is all you need to create this \ldots}
+
+    \begin{figure}
+            \includegraphics[scale=0.3]{img/rmarkdown_result.png}
+    \end{figure}
+
+\end{frame}
+
+\begin{frame}{Your group projects}
+
+    Your project should be \textbf{reproducible}.
+
+    \begin{itemize}
+        \item Your paper should have clear descriptions of your measurement instrument
+        \begin{itemize}
+            \item Survey: questionnaire
+            \item Content analysis: coding scheme
+            \item Composite indicators: original variables and how they were aggregated
+        \end{itemize}
+
+        \item A complete account of your data
+        \begin{itemize}
+            \item Including as much raw data (e.g. texts for content analysis, data sets for surveys) as possible with instructions (detailed descriptions and syntax where possible) for how you accessed/set up, cleaned and analysed it
+            \item You should submit separate file types as appendices to your report
+        \end{itemize}
+
+    \end{itemize}
+
+\end{frame}
+
 
 
 

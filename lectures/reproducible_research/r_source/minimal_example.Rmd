@@ -1,0 +1,52 @@
+---
+title: "Example Dynamically Linked Research Project"
+author: "Christopher Gandrud"
+date: "10 March 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+
+```
+
+## R Markdown
+
+Lorem ipsum dolor sit amet, reprehendunt interpretaris his cu. Fierent blandit ei vel, mel aliquip habemus no, eos novum eligendi ea. Eu unum facete salutatus sit. Has eu assum equidem deseruisse.
+
+Sumo dicant nonumy his ea, usu veri utinam at, duo ex ludus voluptua. Eos et modus prompta, quo ut noluisse sensibus. Quem possit splendide ea duo, usu lorem audiam ne, ei sea delenit lobortis disputando. Te scripta epicuri convenire ius, eum fabulas admodum quaestio in.
+
+Ut alia discere conclusionemque eos, in mei mollis assentior. Mel ea dolor urbanitas. Te commodo suscipit nec, ei quo detraxit gloriatur. Vel ancillae propriae temporibus ei. Vel ne solet doming definitionem, vim iudico possit pericula ex.
+
+
+```{r}
+# Load required packages
+library(WDI)
+library(dplyr)
+library(ggplot2)
+
+# Download women in parliament data from World Bank Development indicators
+# from 1995. Indicator ID = SG.GEN.PARL.ZS
+women <- WDI(indicator = 'SG.GEN.PARL.ZS', start = 1995)
+
+# Clean up: (1) rename women in parliament indicator, 
+# (2) select data from Algeria, Germany, Japan, and Sweden
+women <- rename(women, women_in_parl = SG.GEN.PARL.ZS)
+women <- filter(women, country %in% c('Algeria', 'Germany', 'Japan', 'Sweden'))
+```
+
+## Including Plots
+
+Dicat fuisset aliquando vix cu, malis velit persequeris per et.
+
+```{r}
+# Create a comparative line plot of the data
+ggplot(women, aes(x = year, y = women_in_parl, colour = country)) +
+geom_line() +
+ylab('Women in Parliament (%)') + xlab('') +
+theme_bw()
+```
+
+Nemore senserit assueverit eum no, qui vocent option accusam ut. Integre detraxit ad vel, mei libris noluisse suavitate ad. Stet novum dicant ius cu, quot doming iudicabit ea mel. Rebum iracundia vix ne, ex probo labores feugait cum, nihil choro et nec. Novum vocibus deterruisset ei mea.
