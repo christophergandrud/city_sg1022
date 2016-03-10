@@ -232,6 +232,52 @@
 
 \section{Why reproducible research?}
 
+\begin{frame}{For you}
+
+    \begin{itemize}
+        \item \textbf{Better work habits}
+
+            \begin{itemize}
+                \item If you are making your research reproducible from the start you are more clearly documenting and organising your work.
+
+                \item So, you will be more likely to \textbf{remember} what you did in the future!
+
+                \item So, you are \textbf{less likely to make errors} and you are more likely to find and fix the errors you do make.
+            \end{itemize}
+
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+    \begin{center}
+        {\LARGE{We \textbf{all make mistakes} in our research!}}
+
+        \vspace{1cm}
+
+        Instead of pretending like we don't, we should \textbf{have procedures} that help us \textbf{minimise} our errors and allow us (and others) to \textbf{find} and \textbf{correct} the errors we do make.
+    \end{center}
+
+\end{frame}
+
+\begin{frame}{For you}
+
+    \begin{itemize}
+        \item \textbf{Better work habits}
+
+        \vspace{0.5cm}
+
+        \item \textbf{Better teamwork}
+
+        \begin{itemize}
+            \item If you are making your work reproducible for independent researchers, then your work will be easier for your teammates to understand and collaborate on.
+        \end{itemize}
+
+    \end{itemize}
+
+\end{frame}
+
 \begin{frame}{For science}
 
     A \alert{core tenant} of science: Scientific conclusions that are \textbf{not replicable} should be \textbf{abandoned or modified} ``when confronted with more complete or reliable \ldots evidence''
@@ -324,7 +370,7 @@
 
 \begin{frame}{Example: LaCour Affair}
 
-    \textbf{Background:} Lacour and Green (2014) found that having a conversation with a gay person had a very strong positive long-term effect on support for same-sex for marriage. This was \textbf{widely reported} in the popular press and advocacy groups began to use similar techniques. 
+    \textbf{Background:} Lacour and Green (2014) found that having a conversation with a gay person had a very strong positive long-term effect on support for same-sex for marriage. This was \textbf{widely reported} in the popular press and advocacy groups began to use similar techniques.
 
     \textbf{Original finding:}
 
@@ -344,20 +390,92 @@
 
 \end{frame}
 
+\begin{frame}{For science}
+
+    Reproducible research also benefits science by:
+
+    \begin{itemize}
+        \item \textbf{Avoiding scientists wasting time} trying to understand a phenomenon that does not exist.
+
+        \vspace{0.5cm}
+
+        \item \textbf{Avoiding effort duplication} by cutting down the time the scientific community spends gathering data/developing analytic procedures.
+    \end{itemize}
+
+
+\end{frame}
+
 \section{How to do really reproducible research}
 
+\begin{frame}
 
-\begin{frame}{Linking Presentation to Research}
-
-    To be able to {\large{\textbf{evaluate findings}}} in a presentation document, it needs to be {\large{\textbf{closely linked}}} to the research.
+\begin{exampleblock}{Reproducible Research}
+    When there is sufficient information available for independent researchers to make the same findings, using the same procedures with the \emph{same data}.
+\end{exampleblock}
 
     \vspace{1cm}
+
+    \begin{center}
+        {\LARGE{How do we do this?}}
+    \end{center}
+
+\end{frame}
+
+\begin{frame}{Doing reproducible research}
+
+    {\large{Some key tips:}}
+
+    \begin{itemize}
+
+        \item \alert{Document everything!}
+
+        \item All of your files should be \alert{human-readable}.
+
+        \item \alert{From the start} of your research project, have a plan to \alert{organise}, store, and make your files accessible.
+
+        \item Explicitly \alert{tie your files together}.
+    \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Document Everything!}
 
     Need to \alert{fully document} the steps we took and the rationale for these steps.
 
     \begin{itemize}
         \item Documentation \emph{both} in the presentation document (usually discussion of general steps) and ``appendix'' files (e.g. source code, survey questionnaires, raw data).
     \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Document everything specifics: source code}
+
+    It is important to record in detail the steps you used to clean and analyse your data, ideally with the original source code (e.g. SPSS Syntax or R source).
+
+\end{frame}
+
+\begin{frame}[fragile]{Minimal (messy) R Example}
+
+\begin{lstlisting}
+library(WDI)
+library(dplyr)
+library(ggplot2)
+setwd('U:\\research/group_project')
+women<-WDI(indicator='SG.GEN.PARL.ZS',start=1995)%>%
+rename(women_in_parl=SG.GEN.PARL.ZS)%>%
+filter(country%in%c('Algeria','Germany','Japan','Sweden'))
+ggplot(women,aes(x=year,y=women_in_parl,colour=country))+
+geom_line()+ylab('WomeninParliament(%)')+xlab('')+theme_bw()
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Result}
+
+    \begin{figure}
+        \includegraphics[scale=0.5]{img/women_compare.pdf}
+    \end{figure}
 
 \end{frame}
 
