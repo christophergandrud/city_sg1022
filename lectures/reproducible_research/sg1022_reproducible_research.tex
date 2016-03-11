@@ -129,7 +129,7 @@
 
 \begin{frame}
     \begin{center}
-        {\large{We need to make available our research, not just the advertising!}}
+        {\large{We need to make our research available, not just the advertising!}}
     \end{center}
 \end{frame}
 
@@ -226,6 +226,8 @@
 
         \item If you are making your research reproducible from the start you are more clearly \textbf{documenting} and \textbf{organising} your work.
 
+        \vspace{1cm}
+
         \item So, you will be more likely to \textbf{remember} what you did in the future! Bowers (2011, 2) describes this as making a ``\emph{better relationship with your future self}''.
 
         \item So, you are \textbf{less likely to make errors} and you are more likely to \textbf{find} and \textbf{fix} the errors you do make.
@@ -265,7 +267,7 @@
 
     \begin{itemize}
 
-            \item If you are making your work reproducible for independent researchers, then your work will be \textbf{easier for your teammates to understand} and collaborate with you.
+            \item If you are making your work reproducible for independent researchers, then your work will be \textbf{easier for your teammates to understand} and \textbf{collaborate} with you.
 
     \end{itemize}
 
@@ -660,7 +662,8 @@ women <- filter(women, country %in%
                 c('Algeria', 'Germany', 'Japan', 'Sweden'))
 
 # Create a comparative line plot of the data.
-ggplot(women, aes(x = year, y = women_in_parl, colour = country)) +
+ggplot(women, aes(x = year, y = women_in_parl,
+                  colour = country)) +
 geom_line() +
 ylab('Women in Parliament (%)') + xlab('') +
 theme_bw()
@@ -672,6 +675,9 @@ theme_bw()
 \begin{frame}[fragile]{Minimal SPSS Example}
 
 \begin{lstlisting}
+* Load employee survey data & find jobcat frequencies
+* Christopher Gandrud
+
 * Load data from employee_data.sav file in the C drive.
 GET FILE='C:\group_project\data\employee_data.sav'.
 
@@ -685,10 +691,10 @@ FREQUENCIES
 
 \begin{frame}{Organise your files into an understandable hierarchy}
 
-    Start your research with a plan to to organise, store, and make your files available.
+    Start your research with a plan to organise, store, and make your files available. Your files should be arranged in a \textbf{hierarchy} that makes the \textbf{purpose} of the files clear to independent researchers.
 
     \begin{figure}
-        \includegraphics[scale=0.3]{img/file_tree.png}
+        \includegraphics[scale=0.27]{img/file_tree.png}
     \end{figure}
 
 {\tiny{Gandrud (2015)}}
@@ -820,11 +826,14 @@ export(women, file = 'data/women_in_parl_wdi.csv')
 \begin{frame}[fragile]{Minimal SPSS Example}
 
 \begin{lstlisting}
+* Load employee survey data, select jobcat >= 6 and save
+* Christopher Gandrud
+
 * Load data from employee_data.sav file in the C drive.
 GET FILE='C:\group_project\data\employee_data.sav'.
 
 * Select jobcat greater than or equal to 6.
-SELECT if read >= 6.
+SELECT if jobcat >= 6.
 
 * Save subsetted data set
 SAVE OUTFILE='C:\group_project\data\employee_data_jobcat_subset.sav'.
@@ -874,7 +883,7 @@ SAVE OUTFILE='C:\group_project\data\employee_data_jobcat_subset.sav'.
         \item A complete account of your data
         \begin{itemize}
             \item Including as much raw data (e.g. texts for content analysis, data sets for surveys) as possible with instructions (detailed descriptions and syntax where possible) for how you accessed/set up, cleaned and analysed it
-            \item You should submit separate file types as appendices to your report
+            \item You should submit non-presentation files as appendices to your report
         \end{itemize}
 
     \end{itemize}

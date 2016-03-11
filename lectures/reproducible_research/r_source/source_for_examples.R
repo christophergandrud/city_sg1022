@@ -19,12 +19,20 @@ main <- data.frame(
 
 pal <- wes_palette("Cavalcanti")[c(1:2, 4:5)]
 
-pal_ind <- c('#ccc', '#02401B', '#ccc', '#ccc')
+pal_ind <- c('#cccccc', '#02401B', '#cccccc', '#cccccc')
 
 # All countries
 ggplot(main, aes(as.factor(year), support, group = country, colour = country)) +
     geom_line() +
     scale_colour_manual(values = pal, name = '') +
+    scale_y_continuous(limits = c(0, 100)) +
+    xlab('\nSurvey Wave') + ylab('Support Military Rule\n(% of respondents)\n') +
+    theme_bw()
+
+# Highlight Indonesia
+ggplot(main, aes(as.factor(year), support, group = country, colour = country)) +
+    geom_line() +
+    scale_colour_manual(values = pal_ind, name = '') +
     scale_y_continuous(limits = c(0, 100)) +
     xlab('\nSurvey Wave') + ylab('Support Military Rule\n(% of respondents)\n') +
     theme_bw()
