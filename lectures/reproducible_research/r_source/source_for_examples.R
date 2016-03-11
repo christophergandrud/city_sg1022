@@ -19,6 +19,9 @@ main <- data.frame(
 
 pal <- wes_palette("Cavalcanti")[c(1:2, 4:5)]
 
+pal_ind <- c('#ccc', '#02401B', '#ccc', '#ccc')
+
+# All countries
 ggplot(main, aes(as.factor(year), support, group = country, colour = country)) +
     geom_line() +
     scale_colour_manual(values = pal, name = '') +
