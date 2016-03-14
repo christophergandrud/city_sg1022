@@ -78,7 +78,7 @@
 
 \end{frame}
 
-\section{What is reproducible research?}
+\section{What is research?}
 
 \begin{frame}{What is research?}
 
@@ -140,7 +140,17 @@
 
     If we make the research available, then it will be {\large{more likely}} that other researchers can \textbf{replicate} our work.
 
-    \vspace{1cm}
+\end{frame}
+
+\begin{frame}{Replicability}
+
+    \begin{exampleblock}{Replicable Research}
+        When there is \emph{sufficient information} available for \emph{independent researchers} to make the \emph{same findings}, using the \emph{same procedures} with \emph{new data}.
+    \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Replicability}
 
     \textbf{No one study proves} anything.
 
@@ -151,15 +161,6 @@
     \vspace{0.5cm}
 
     \textbf{Replication} is an important part of \textbf{strengthening} this body of evidence.
-
-\end{frame}
-
-
-\begin{frame}{Replicability}
-
-    \begin{exampleblock}{Replicable Research}
-        When there is \emph{sufficient information} available for \emph{independent researchers} to make the \emph{same findings}, using the \emph{same procedures} with \emph{new data}.
-    \end{exampleblock}
 
 \end{frame}
 
@@ -267,7 +268,7 @@
 
     \begin{itemize}
 
-            \item If you are making your work reproducible for independent researchers, then your work will be \textbf{easier for your teammates to understand} and \textbf{collaborate} with you.
+            \item If you are making your work reproducible for independent researchers, then your work will be \textbf{easier for your teammates to understand} and \textbf{collaborate} on with you.
 
     \end{itemize}
 
@@ -454,14 +455,14 @@
 \begin{frame}
 
     \begin{center}
-        \textbf{Reproducible research} practices--questionnaire and translation was available--\textbf{made it possible to find} these errors.
+        \textbf{Reproducible research} practices--the questionnaires and translations were available--\textbf{made it possible to find} these errors.
     \end{center}
 
 \end{frame}
 
 \begin{frame}{Example: Reinhart and Rogoff (2010)}
 
-    \textbf{Background:} Reinhart and Rogoff (2010) in a highly influential study (in academics and government) found a threshold effect at 90\% Public debt/GDP and Economic Growth.
+    \textbf{Background:} Reinhart and Rogoff (2010) in a highly influential study (in academics and government) found a threshold effect at 90\% Public debt/GDP on economic growth. Above 90\% growth slowed dramatically.
 
     \textbf{Original finding:}
 
@@ -522,6 +523,14 @@
 \end{frame}
 
 \section{How to do really reproducible research}
+
+\begin{frame}
+
+\begin{exampleblock}{Reproducible Research}
+    When there is sufficient information available for independent researchers to make the same findings, using the same procedures with the \emph{same data}.
+\end{exampleblock}
+
+\end{frame}
 
 \begin{frame}
 
@@ -681,7 +690,7 @@ theme_bw()
 * Load data from employee_data.sav file in the C drive.
 GET FILE='C:\group_project\data\employee_data.sav'.
 
-* Find frequencies of jobcat variable and order
+* Find frequencies of jobcat variable and order them
 FREQUENCIES
     VARIABLES=jobcat
     ORDER=ANALYSIS.
