@@ -569,14 +569,14 @@
     Need to \alert{fully document} the steps we took and the rationale for these steps.
 
     \begin{itemize}
-        \item Documentation \emph{both} in the presentation document (usually discussion of general steps) and ``appendix'' files (e.g. source code, survey questionnaires, raw data).
+        \item Documentation \emph{both} in the presentation document (usually discussion of general steps) and appendix files (e.g. data cleaning and analysis code, survey questionnaires, raw data).
     \end{itemize}
 
 \end{frame}
 
 \begin{frame}{Document everything specifics: source code}
 
-    It is important to record in detail the steps you used to clean and analyse your data, ideally with the original source code (e.g. SPSS Syntax or R source).
+    It is important to record in detail the steps you used to clean and analyse your data, ideally with the original source code (e.g. SPSS syntax or R source).
 
 \end{frame}
 
@@ -629,7 +629,7 @@ geom_line()+ylab('WomeninParliament(%)')+xlab('')+theme_bw()
 
             \begin{itemize}
                 \item R comment character: \texttt{\#}
-                \item SPSS comment character: \texttt{*}
+                \item SPSS comments: Begin with \texttt{*} and end with \texttt{.}
             \end{itemize}
     \end{itemize}
 
@@ -684,16 +684,20 @@ theme_bw()
 \begin{frame}[fragile]{Minimal SPSS Example}
 
 \begin{lstlisting}
-* Load employee survey data & find jobcat frequencies
-* Christopher Gandrud
+* Load employee survey data & recode age.
+* Christopher Gandrud.
 
 * Load data from employee_data.sav file in the C drive.
 GET FILE='C:\group_project\data\employee_data.sav'.
 
-* Find frequencies of jobcat variable and order them
-FREQUENCIES
-    VARIABLES=jobcat
-    ORDER=ANALYSIS.
+*Recode respondent age in years into a 3-category variable.
+RECODE agea (Lowest thru 25=1) (26 thru 64=2) (65 thru Highest=3) INTO age3.
+VARIABLE LABELS  age3 'age - 3 categories'.
+VALUE LABELS age3
+1 '25 or under'
+2 '26-64'
+3 '65 or over'.
+EXECUTE.
 \end{lstlisting}
 
 \end{frame}
@@ -835,17 +839,23 @@ export(women, file = 'data/women_in_parl_wdi.csv')
 \begin{frame}[fragile]{Minimal SPSS Example}
 
 \begin{lstlisting}
-* Load employee survey data, select jobcat >= 6 and save
-* Christopher Gandrud
+* Load employee survey data, recode age, and save.
+* Christopher Gandrud.
 
 * Load data from employee_data.sav file in the C drive.
 GET FILE='C:\group_project\data\employee_data.sav'.
 
-* Select jobcat greater than or equal to 6.
-SELECT if jobcat >= 6.
+*Recode respondent age in years into a 3-category variable.
+RECODE agea (Lowest thru 25=1) (26 thru 64=2) (65 thru Highest=3) INTO age3.
+VARIABLE LABELS  age3 'age - 3 categories'.
+VALUE LABELS age3
+1 '25 or under'
+2 '26-64'
+3 '65 or over'.
+EXECUTE.
 
-* Save subsetted data set
-SAVE OUTFILE='C:\group_project\data\employee_data_jobcat_subset.sav'.
+* Save subsetted data set.
+SAVE OUTFILE='C:\group_project\data\employee_data_cleaner.sav'.
 \end{lstlisting}
 
 \end{frame}
@@ -897,6 +907,12 @@ SAVE OUTFILE='C:\group_project\data\employee_data_jobcat_subset.sav'.
 
     \end{itemize}
 
+\end{frame}
+
+\begin{frame}{Note: In the Labs}
+    \begin{center}
+        Note: in the labs this week we will be introducing you to the {\large{\textbf{Q-Step Pathways}}} you can choose from.
+    \end{center}
 \end{frame}
 
 
