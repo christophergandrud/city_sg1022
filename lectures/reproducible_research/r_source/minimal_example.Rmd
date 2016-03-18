@@ -50,3 +50,10 @@ theme_bw()
 ```
 
 Nemore senserit assueverit eum no, qui vocent option accusam ut. Integre detraxit ad vel, mei libris noluisse suavitate ad. Stet novum dicant ius cu, quot doming iudicabit ea mel. Rebum iracundia vix ne, ex probo labores feugait cum, nihil choro et nec. Novum vocibus deterruisset ei mea.
+
+## Include a table
+
+```{r}
+knitr::kable(summary(women[, 3:4]), 
+             col.names = c('Women in Parliament (%)', 'Year'))
+```
