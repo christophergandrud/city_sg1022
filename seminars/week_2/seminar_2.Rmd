@@ -45,7 +45,7 @@ Today we will use six new packages that you need to install:
 
 ```{r eval=FALSE}
 # Create a vector of the packages to install
-packages <- c('WDI', 'dplyr', 'DataCombine'
+packages <- c('WDI', 'dplyr', 'DataCombine' 'Amelia',
              'corrplot', 'googleVis', 'ggplot2')
 
 # Install packages
@@ -60,6 +60,7 @@ install.packages(packages)
 library(WDI)
 library(dplyr)
 library(DataCombine)
+library(Amelia)
 library(corrplot)
 library(googleVis)
 library(ggplot2)
@@ -181,6 +182,29 @@ summary(wdi$electricity_use)
 Always take a look at your data to get a sense of the distribution of missing values. 
 
 Why do you think values of the methane emissions variable missing?
+
+## Missingness map
+
+One quick way to get an overview of the missing data across all of your variables is to create a **missingness map**. To do this use the `missmap` function from the Amelia package:
+
+```{r, message=FALSE}
+# Subset the data (just to make the illustration easier to understand)
+# Note: this is only for demonstration, you do not need to do this.
+wdi_sub <- wdi %>% filter(country %in% c('Afghanistan', 'Belgium', 'China', 
+                                       'Colombia', 'France', 'Germany', 
+                                       'South Africa', 'Zambia'))
+
+# Create missingness map
+missmap(obj = wdi_sub,
+        csvar = 'country', # country identifying variable 
+        tsvar = 'year',    # time identifying variable
+        y.cex = 0.75,       # decrease y-axis labels so they fit
+        x.cex = 0.55        # decrease x-axis labels so they fit
+        ) 
+```
+
+We can quickly see from this plot that `methane_emmissions` has a lot of missing data and `population_growth` has few missing values.
+
 
 ## Recode special values to NA
 
