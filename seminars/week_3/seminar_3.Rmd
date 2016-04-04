@@ -319,7 +319,7 @@ barplot(support, beside = TRUE, col = c('yellow', 'blue'),
 
 For a list of R colour names see: <http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf>
 
-## Plotting Percentages--Base R (1)
+## Plotting Proportions--Base R (1)
 
 To plot proportions (easier for cross-group comparability), first create a table of the proportions:
 
